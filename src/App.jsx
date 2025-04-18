@@ -12,6 +12,8 @@ import { StartupProvider } from './contexts/StartupContext'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
 import UploadPitch from './pages/UploadPitch'
+import FindPitches from './pages/FindPitches'
+import PitchDetails from './pages/PitchDetails'
 
 const App = () => {
   const location = useLocation();
@@ -40,6 +42,8 @@ const App = () => {
             <Route path='/privacy-and-policy' element={<PrivacyPolicy />} />
             <Route path='/account/founder/profile' element={<Profile />} />
             <Route path='/account/founder/create-pitch' element={<UploadPitch />} />
+            <Route path='/account/investor/find-pitches' element={<FindPitches />} />
+            <Route path='/account/investor/find-pitches/pitch-id-11' element={<PitchDetails />} />
           </Routes>
         </main>
         {!hideFooter &&

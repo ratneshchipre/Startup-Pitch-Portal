@@ -1,4 +1,5 @@
 import React from 'react'
+import { countries } from "../countryList.js";
 
 const Profile = () => {
     const handlePitchSubmit = (e) => {
@@ -29,9 +30,11 @@ const Profile = () => {
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Country</label>
                         <select className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]'>
-                            <option value="Choose a country">Choose a country</option>
-                            <option value="india">India</option>
-                            <option value="usa">USA</option>
+                            {countries.map((country, index) => (
+                                <option key={index} value={country}>
+                                    {country}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
