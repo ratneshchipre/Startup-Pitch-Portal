@@ -44,7 +44,7 @@ const Login = () => {
           <div className='flex flex-col mt-[1rem] w-full'>
             <span className='font-Regular text-txt-black text-center'>Don't have an account yet? <Link to='/account/signup' className='text-btn-blue hover:underline'>Sign Up</Link></span>
             <span className='font-Regular text-[0.9rem] mt-[1rem] text-center'>
-              By continuing, you agree to NextMove's <br /><Link to='/' className='text-btn-blue hover:underline'>Terms and Condition</Link> and <Link to='/' className='text-btn-blue hover:underline'>Privacy Policy</Link>
+              By continuing, you agree to NextMove's <br /><Link to='/terms-and-conditions' className='text-btn-blue hover:underline'>Terms and Condition</Link> and <Link to='/privacy-and-policy' className='text-btn-blue hover:underline'>Privacy Policy</Link>
             </span>
           </div>
         </div>

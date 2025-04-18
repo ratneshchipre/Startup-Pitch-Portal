@@ -5,6 +5,8 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Signup from './pages/Signup'
+import TermsConditions from './pages/TermsConditions'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 
 const App = () => {
   const location = useLocation();
@@ -23,6 +25,8 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/account/login' element={<Login />} />
           <Route path='/account/signup' element={<Signup />} />
+          <Route path='/terms-and-conditions' element={<TermsConditions />} />
+          <Route path='/privacy-and-policy' element={<PrivacyPolicy />} />
         </Routes>
       </main>
       {!hideFooter &&
