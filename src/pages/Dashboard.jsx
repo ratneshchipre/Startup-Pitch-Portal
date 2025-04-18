@@ -31,7 +31,7 @@ const Dashboard = () => {
                         <p className='font-Regular text-txt-gray-black text-center wrap-break-word line-clamp-1 overflow-hidden [-webkit-box-orient:vertical] [display:-webkit-box]'>ratneshchipre@gmail.com</p>
                     </div>
                 </div>
-                <div className='flex flex-col gap-[7rem] items-center px-[1rem] py-[1.3rem]'>
+                <div className='flex flex-col items-center px-[1rem] py-[1.3rem]'>
                     <div className='w-full'>
                         <ul className='font-Medium flex flex-col text-features gap-[0.4rem]'>
                             <li>
@@ -43,7 +43,7 @@ const Dashboard = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to='/user/founder/create-pitch'>
+                                <Link to='/account/founder/create-pitch'>
                                     <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
                                         <LuUpload />
                                         <span className='text-[1.1rem]'>Upload Pitch</span>
@@ -64,7 +64,7 @@ const Dashboard = () => {
                             </li>
                         </ul>
                     </div>
-                    <div className='w-full font-Medium flex flex-col text-features gap-[0.4rem]'>
+                    <div className='w-full font-Medium flex flex-col mt-[7rem] text-features gap-[0.4rem]'>
                         <Link to='/user/founder/settings'>
                             <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
                                 <FontAwesomeIcon icon={faGear} className='' />

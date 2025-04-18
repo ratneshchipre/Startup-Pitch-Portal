@@ -11,6 +11,7 @@ import ResetPassword from './pages/ResetPassword'
 import { StartupProvider } from './contexts/StartupContext'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
+import UploadPitch from './pages/UploadPitch'
 
 const App = () => {
   const location = useLocation();
@@ -38,6 +39,7 @@ const App = () => {
             <Route path='/terms-and-conditions' element={<TermsConditions />} />
             <Route path='/privacy-and-policy' element={<PrivacyPolicy />} />
             <Route path='/account/founder/profile' element={<Profile />} />
+            <Route path='/account/founder/create-pitch' element={<UploadPitch />} />
           </Routes>
         </main>
         {!hideFooter &&
