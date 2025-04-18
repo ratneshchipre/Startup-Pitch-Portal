@@ -9,7 +9,7 @@ const Navbar = () => {
 
     return (
         <nav className='flex justify-center items-center'>
-            <div className={`fixed flex justify-between items-center w-full top-0 py-[0.8rem] ${isOpen ? 'border-b-dash-border border-b-[1.5px]' : ''} px-[1.5rem] lg:px-[4rem] xl:px-[7rem] z-50 backdrop-blur-sm bg-nav-white/70`}>
+            <div className={`fixed flex justify-between items-center w-full top-0 py-[0.8rem] ${isOpen ? 'border-b-dash-border border-b-[1.5px]' : ''} px-[1.5rem] lg:px-[4rem] xl:px-[7rem] z-100 backdrop-blur-sm bg-nav-white/70`}>
                 <Link to='/' className='font-Medium'>
                     <div className='flex items-center'>
                         <h1 className='text-txt-black text-[1.4rem]'>NextMove</h1>
@@ -33,7 +33,7 @@ const Navbar = () => {
                 </div>
             </div>
             {isOpen &&
-                <div className='fixed top-0 backdrop-blur-sm bg-nav-white/70 border-b-dash-border border-b-[1.5px] flex flex-col w-full h-[13rem] items-end justify-end pb-[1.6rem] pr-[1.5rem]'>
+                <div className='fixed top-0 z-90 backdrop-blur-sm bg-nav-white/70 border-b-dash-border border-b-[1.5px] flex flex-col w-full h-[13rem] items-end justify-end pb-[1.6rem] pr-[1.5rem]'>
                     <div className='flex flex-col justify-end gap-[1rem] items-end'>
                         <Link to='/account/login' onClick={() => setIsOpen(false)} className='flex items-center font-Medium text-[1rem]'>
                             <button className='cursor-pointer'>
