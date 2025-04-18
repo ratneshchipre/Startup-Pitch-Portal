@@ -57,7 +57,7 @@ const Signup = () => {
               <input type="password" placeholder='Enter your password' className='border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black' />
             </div>
           </form>
-          <button className='font-Regular mt-[1.5rem] bg-border text-nav-white w-full py-[0.5rem] text-center rounded-lg  cursor-not-allowed transition'>
+          <button className='font-Regular mt-[1.5rem] bg-border text-nav-white w-full py-[0.5rem] text-center rounded-lg cursor-not-allowed transition'>
             {role}
             <FontAwesomeIcon icon={faCaretRight} className='ml-[0.5rem]' />
           </button>

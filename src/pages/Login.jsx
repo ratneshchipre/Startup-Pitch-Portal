@@ -37,7 +37,12 @@ const Login = () => {
               <input type="password" placeholder='Enter your password' className='border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black' />
             </div>
           </form>
-          <button className='font-Regular mt-[1.5rem] bg-border text-nav-white w-full py-[0.5rem] text-center rounded-lg  cursor-not-allowed transition'>
+          <div className='flex flex-col w-full mt-[0.5rem]'>
+            <Link to='/account/login/reset-password'>
+              <span className='font-Medium text-btn-blue text-[1.05rem] cursor-pointer'>Forgot password?</span>
+            </Link>
+          </div>
+          <button className='font-Regular mt-[1.5rem] bg-border text-nav-white w-full py-[0.5rem] text-center rounded-lg cursor-not-allowed transition'>
             Continue
             <FontAwesomeIcon icon={faCaretRight} className='ml-[0.5rem]' />
           </button>
