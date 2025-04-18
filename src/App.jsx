@@ -8,35 +8,45 @@ import Signup from './pages/Signup'
 import TermsConditions from './pages/TermsConditions'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import ResetPassword from './pages/ResetPassword'
+import { StartupProvider } from './contexts/StartupContext'
+import Dashboard from './pages/Dashboard'
+import Profile from './pages/Profile'
 
 const App = () => {
   const location = useLocation();
   const hideNavbar = location.pathname.startsWith("/account/founder");
   const hideFooter = location.pathname.startsWith("/account/founder");
+  const showDashboard = location.pathname.startsWith("/account/founder");
 
   return (
-    <div className='min-h-screen flex flex-col bg-nav-white'>
-      {!hideNavbar &&
-        <header>
-          <Navbar />
-        </header>
-      }
-      <main className='flex-grow'>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/account/login' element={<Login />} />
-          <Route path='/account/login/reset-password' element={<ResetPassword />} />
-          <Route path='/account/signup' element={<Signup />} />
-          <Route path='/terms-and-conditions' element={<TermsConditions />} />
-          <Route path='/privacy-and-policy' element={<PrivacyPolicy />} />
-        </Routes>
-      </main>
-      {!hideFooter &&
-        <footer>
-          <Footer />
-        </footer>
-      }
-    </div>
+    <StartupProvider>
+      <div className='min-h-screen flex flex-col bg-nav-white'>
+        {!hideNavbar &&
+          <header>
+            <Navbar />
+          </header>
+        }
+        {showDashboard &&
+          <Dashboard />
+        }
+        <main className='flex-grow'>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/account/login' element={<Login />} />
+            <Route path='/account/login/reset-password' element={<ResetPassword />} />
+            <Route path='/account/signup' element={<Signup />} />
+            <Route path='/terms-and-conditions' element={<TermsConditions />} />
+            <Route path='/privacy-and-policy' element={<PrivacyPolicy />} />
+            <Route path='/account/founder/profile' element={<Profile />} />
+          </Routes>
+        </main>
+        {!hideFooter &&
+          <footer>
+            <Footer />
+          </footer>
+        }
+      </div>
+    </StartupProvider>
   )
 }
 

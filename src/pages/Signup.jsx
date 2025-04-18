@@ -4,9 +4,11 @@ import googleImg from "../assets/googleImg.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
+import { useStartupContext } from '../contexts/StartupContext';
 
 const Signup = () => {
   const [role, setRole] = useState('Select a role')
+  const { selectedRole, checkRole } = useStartupContext();
 
   const handleLogIn = (e) => {
     e.preventDefault();
@@ -23,12 +25,18 @@ const Signup = () => {
           <p className='font-Regular w-full text-txt-gray-black text-[1.1rem] text-center mt-[0.3rem]'>Sign Up as a Founder or an Investor</p>
           <div className='flex w-full gap-[0.5rem]'>
             <button
-              className='flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] py-[0.5rem] px-[0.9rem] rounded-xl cursor-pointer hover:border-txt-black focus:bg-btn-blue focus:text-nav-white focus:border-btn-blue'
-              onClick={() => setRole('Sign Up as a Founder')}
+              className={`flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] py-[0.5rem] px-[0.9rem] rounded-xl cursor-pointer hover:border-txt-black focus:bg-btn-blue focus:text-nav-white focus:border-btn-blue ${checkRole === 'founder' ? 'bg-btn-blue border-btn-blue text-white' : ''} ${checkRole === 'founder' ? 'text-nav-white' : ''}`}
+              onClick={() => {
+                setRole('Sign Up as a Founder')
+                selectedRole('founder')
+              }}
             >Join as a Founder</button>
             <button
-              className='flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] py-[0.5rem] px-[0.9rem] rounded-xl cursor-pointer hover:border-txt-black focus:bg-btn-blue focus:text-nav-white focus:border-btn-blue'
-              onClick={() => setRole('Sign Up as an Investor')}
+              className={`flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] py-[0.5rem] px-[0.9rem] rounded-xl cursor-pointer hover:border-txt-black focus:bg-btn-blue focus:text-nav-white focus:border-btn-blue ${checkRole === 'investor' ? 'bg-btn-blue border-btn-blue text-white' : ''} ${checkRole === 'investor' ? 'text-nav-white' : ''}`}
+              onClick={() => {
+                setRole('Sign Up as an Investor')
+                selectedRole('investor')
+              }}
             >Join as an Investor</button>
           </div>
           <button className='flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] py-[0.5rem] px-[0.4rem] rounded-xl cursor-pointer hover:border-txt-black'>
@@ -58,7 +66,7 @@ const Signup = () => {
             </div>
           </form>
           <button className='font-Regular mt-[1.5rem] bg-border text-nav-white w-full py-[0.5rem] text-center rounded-lg cursor-not-allowed transition'>
-            {role}
+            {role && checkRole === 'founder' ? 'Sign Up as a Founder' : 'Sign Up as a Investor'}
             <FontAwesomeIcon icon={faCaretRight} className='ml-[0.5rem]' />
           </button>
           <div className='flex flex-col mt-[1rem] w-full'>
