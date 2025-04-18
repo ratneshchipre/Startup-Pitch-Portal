@@ -14,6 +14,7 @@ import Profile from './pages/Profile'
 import UploadPitch from './pages/UploadPitch'
 import FindPitches from './pages/FindPitches'
 import PitchDetails from './pages/PitchDetails'
+import ScrollToTop from './components/ScrollToTop'
 
 const App = () => {
   const location = useLocation();
@@ -32,6 +33,9 @@ const App = () => {
         {showDashboard &&
           <Dashboard />
         }
+
+        <ScrollToTop />
+
         <main className='flex-grow'>
           <Routes>
             <Route path='/' element={<Home />} />
