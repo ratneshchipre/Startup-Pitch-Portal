@@ -1,19 +1,20 @@
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import headLogo from "../assets/headLogo(black).png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router-dom';
-import { signupUserWithEmailAndPassword } from '../contexts/Firebase'
+import { useFirebase } from '../contexts/Firebase';
 
 const OtpVerification = () => {
     const navigate = useNavigate();
-    // const firebase = useFirebase();
+    const firebase = useFirebase();
     const [condition, setCondition] = useState("");
     const [otpSent, setOtpSent] = useState("Send OTP");
     const [counter, setCounter] = useState(0);
     const [otp, setOtp] = useState("");
     const [generatedOtp, setGeneratedOtp] = useState(null);
     const [heading, setHeading] = useState("Verify your OTP");
+
 
     const sendOtp = () => {
         setCondition("Sending OTP...");
@@ -64,7 +65,7 @@ const OtpVerification = () => {
 
             try {
                 const { email1, password1, name1, lastName1 } = JSON.parse(localStorage.getItem("form"));
-                signupUserWithEmailAndPassword(email1, password1, name1, lastName1);
+                firebase.signupUserWithEmailAndPassword(email1, password1, name1, lastName1, navigate);
             } catch (error) {
                 console.error("Signup after OTP error:", error);
                 alert("Something went wrong.");
@@ -112,7 +113,10 @@ const OtpVerification = () => {
                     </button>
                 }
 
-                <Link to={condition === "OTP Sent Successfully!" ? `/account/founder/profile` : `/account/signup`} className={`w-full bg-btn-blue rounded-lg hover:bg-hover-blue text-center mt-[1rem] transition-all ${counter === null ? 'flex' : 'hidden'}`}>
+                <Link
+                    to={condition === "Otp Sent Successfully!!" ? ((JSON.parse(localStorage.getItem("form"))).role1 === "Founder" ? "/user/founder/profile" : "/user/investor/find-pitches") : `/account/signup`}
+                    className={`w-full bg-btn-blue rounded-lg hover:bg-hover-blue text-center mt-[1rem] transition-all ${counter === null ? 'flex' : 'hidden'}`}
+                >
                     <button
                         className='text-center mx-auto text-nav-white font-Medium py-[0.5rem] px-[1rem]'
                         onClick={() => localStorage.setItem("email", JSON.parse(localStorage.getItem("form"))?.email1)}>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { fadeInUp } from '../utils/motion'
 import HeroSec from '../components/HeroSec'
@@ -12,11 +12,14 @@ import founderImg from "../assets/founderImg.png";
 import investorImg from "../assets/investorImg.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartColumn } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStartupContext } from '../contexts/StartupContext';
+import { useFirebase } from '../contexts/Firebase'
 
-const Home = () => {
+export const Home = () => {
     const sectionRef = useRef(null);
+    const firebase = useFirebase();
+    const navigate = useNavigate()
 
     return (
         <div className='flex flex-col items-center justify-center'>

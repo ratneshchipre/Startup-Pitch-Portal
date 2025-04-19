@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
@@ -6,10 +6,47 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
 const PitchCard = () => {
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(null);
+    const [locked, setLocked] = useState(false);
+
+    const handleClick = (value, e) => {
+        if (locked) return;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const isHalf = e.clientX - rect.left < rect.width / 2;
+        const selected = isHalf ? value - 0.5 : value;
+        setRating(selected);
+        setLocked(true);
+    };
+
+    const handleMouseMove = (value, e) => {
+        if (locked) return;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const isHalf = e.clientX - rect.left < rect.width / 2;
+        const hovered = isHalf ? value - 0.5 : value;
+        setHover(hovered);
+    };
+
+    const handleMouseLeave = () => {
+        if (locked) return;
+        setHover(null);
+    };
+
+    const getStarClass = (value) => {
+        const activeValue = hover !== null ? hover : rating;
+
+        if (value <= activeValue) return 'text-btn-blue';
+        if (value - 0.5 === activeValue)
+            return 'text-btn-blue';
+        return 'text-gray-300';
+    };
+
     return (
         <div className='flex flex-col w-full'>
             <div className='w-full mini-desktop:w-auto px-[1.5rem] mini-desktop:ml-[20rem]'>
-                <Link to='/account/investor/find-pitches/pitch-id-11'>
+                <Link to='/account/investor/pitch-id-11'>
                     <div className='hover:bg-dash-border px-[1.2rem] py-[1.4rem] cursor-pointer rounded-md'>
                         <div className='flex items-center justify-between'>
                             <span className='font-Medium text-[1rem] bg-blue-50 border-btn-blue border-[1px] px-[0.8rem] py-[0.4rem] rounded-xl text-txt-black'>Tech</span>
@@ -20,11 +57,16 @@ const PitchCard = () => {
                         <div className='flex justify-between gap-[1rem] items-center'>
                             <span className='font-Regular text-txt-gray-black'>Proposed Funding($): <span className='text-txt-black'>1000</span></span>
                             <div className='flex gap-[0.3rem]'>
-                                <FontAwesomeIcon icon={faStar} className='text-btn-blue' />
-                                <FontAwesomeIcon icon={faStar} className='text-btn-blue' />
-                                <FontAwesomeIcon icon={faStar} className='text-btn-blue' />
-                                <FontAwesomeIcon icon={faStar} className='text-btn-blue' />
-                                <FontAwesomeIcon icon={faStar} className='text-border' />
+                                {[1, 2, 3, 4, 5].map((value) => (
+                                    <FontAwesomeIcon
+                                        icon={faStar}
+                                        key={value}
+                                        className={`cursor-pointer transition-all ${getStarClass(value)}`}
+                                        onClick={(e) => handleClick(value, e)}
+                                        onMouseMove={(e) => handleMouseMove(value, e)}
+                                        onMouseLeave={handleMouseLeave}
+                                    />
+                                ))}
                             </div>
                         </div>
                     </div>

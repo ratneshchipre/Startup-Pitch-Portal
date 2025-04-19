@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -17,6 +17,42 @@ import { useNavigate } from 'react-router-dom'
 
 const PitchDetails = () => {
     const navigate = useNavigate();
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(null);
+    const [locked, setLocked] = useState(false);
+
+    const handleClick = (value, e) => {
+        if (locked) return;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const isHalf = e.clientX - rect.left < rect.width / 2;
+        const selected = isHalf ? value - 0.5 : value;
+        setRating(selected);
+        setLocked(true);
+    };
+
+    const handleMouseMove = (value, e) => {
+        if (locked) return;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const isHalf = e.clientX - rect.left < rect.width / 2;
+        const hovered = isHalf ? value - 0.5 : value;
+        setHover(hovered);
+    };
+
+    const handleMouseLeave = () => {
+        if (locked) return;
+        setHover(null);
+    };
+
+    const getStarClass = (value) => {
+        const activeValue = hover !== null ? hover : rating;
+
+        if (value <= activeValue) return 'text-btn-blue';
+        if (value - 0.5 === activeValue)
+            return 'text-btn-blue';
+        return 'text-gray-300';
+    };
 
     return (
         <div className='flex flex-col w-full'>
@@ -92,11 +128,16 @@ const PitchDetails = () => {
                                 </div>
                                 <div className='mt-[0.8rem] w-full pb-[3.5rem]'>
                                     <div className='flex gap-[0.3rem]'>
-                                        <FontAwesomeIcon icon={faStar} className='text-btn-blue cursor-pointer' />
-                                        <FontAwesomeIcon icon={faStar} className='text-btn-blue cursor-pointer' />
-                                        <FontAwesomeIcon icon={faStar} className='text-btn-blue cursor-pointer' />
-                                        <FontAwesomeIcon icon={faStar} className='text-btn-blue cursor-pointer' />
-                                        <FontAwesomeIcon icon={faStar} className='text-border cursor-pointer' />
+                                        {[1, 2, 3, 4, 5].map((value) => (
+                                            <FontAwesomeIcon
+                                                icon={faStar}
+                                                key={value}
+                                                className={`cursor-pointer transition-all ${getStarClass(value)}`}
+                                                onClick={(e) => handleClick(value, e)}
+                                                onMouseMove={(e) => handleMouseMove(value, e)}
+                                                onMouseLeave={handleMouseLeave}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                             </div>

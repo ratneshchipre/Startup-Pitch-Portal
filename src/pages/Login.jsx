@@ -28,8 +28,9 @@ const Login = () => {
     setLoading(true);
     try {
       await firebase.signinUserWithEmailAndPass(email, password);
+      const role = JSON.parse(localStorage.getItem("form"))?.role1;
       alert("Login successful!");
-      navigate("/account/founder/profile");
+      navigate(`/account/${role.toLowerCase()}/profile`);
     } catch (error) {
       console.error("Login failed:", error);
       alert("Invalid credentials. Please try again.");
@@ -38,7 +39,8 @@ const Login = () => {
   };
 
   const handleGoogleLogin = async () => {
-    await firebase.signinWithGoogle(navigate);
+    const role = JSON.parse(localStorage.getItem("form"))?.role1;
+    await firebase.signinWithGoogle(role, navigate);
   };
 
   return (
