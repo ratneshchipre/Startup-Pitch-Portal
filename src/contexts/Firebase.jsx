@@ -178,12 +178,12 @@ export const FirebaseProvider = (props) => {
                 if (founderSnap.exists()) {
                     const role = founderSnap.data().role;
                     alert("Login successful!");
-                    navigate(`/user/founder/profile`);
+                    navigate(`/account/founder/profile`);
                 }
                 if (investorSnap.exists()) {
                     const role = investorSnap.data().role;
                     alert("Login successful!");
-                    navigate(`/user/investor/profile`);
+                    navigate(`/account/investor/profile`);
                 }
             } else {
                 await user.delete();
