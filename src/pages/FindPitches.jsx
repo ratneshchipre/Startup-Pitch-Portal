@@ -16,7 +16,7 @@ const FindPitches = () => {
                 <PitchCard />
                 <PitchCard />
             </div>
-        </div >
+        </div>
     )
 }
 

@@ -21,7 +21,7 @@ const Dashboard = () => {
                 </div>
                 <h1 className='font-Medium text-[1.3rem] text-txt-black select-none'>Welcome, Ratnesh!</h1>
             </div>
-            <div className={`fixed top-0 left-0 h-full bg-nav-white border-r-dash-border border-r-[2px] transition-all duration-300 ease-in-out w-[70%] mobile:w-[20rem] overflow-hidden z-50 mini-desktop:fixed ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} mini-desktop:opacity-100 mini-desktop:pointer-events-auto`}>
+            <div className={`fixed top-0 left-0 h-full bg-nav-white border-r-dash-border border-r-[2px] transition-all duration-300 ease-in-out w-[70%] mobile:w-[20rem] overflow-hidden z-50 mini-desktop:fixed ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} mini-desktop:opacity-100 mini-desktop:pointer-events-auto shadow-2xl mini-desktop:shadow-lg`}>
                 <div className='mt-[5.5rem] flex flex-col items-center justify-center border-b-dash-border border-b-[2px] pb-[1.2rem] px-[3rem]'>
                     <div className='flex w-[5rem] rounded-[50%] flex-col items-center justify-center'>
                         <img src={avatarImg} alt="avatar" className='h-full w-full object-cover bg-center' />
@@ -35,7 +35,7 @@ const Dashboard = () => {
                     <div className='w-full'>
                         <ul className='font-Medium flex flex-col text-features gap-[0.4rem]'>
                             <li>
-                                <Link to='/account/founder/profile'>
+                                <Link to='/account/founder/profile' onClick={() => setIsOpen(false)}>
                                     <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
                                         <FontAwesomeIcon icon={faUserLarge} className='' />
                                         <span className='text-[1.1rem]'>Profile</span>
@@ -43,7 +43,7 @@ const Dashboard = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to='/account/founder/create-pitch'>
+                                <Link to='/account/founder/create-pitch' onClick={() => setIsOpen(false)}>
                                     <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
                                         <LuUpload />
                                         <span className='text-[1.1rem]'>Upload Pitch</span>
@@ -51,16 +51,20 @@ const Dashboard = () => {
                                 </Link>
                             </li>
                             <li>
-                                <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
-                                    <FontAwesomeIcon icon={faChartLine} className='' />
-                                    <span className='text-[1.1rem]'>Analytics</span>
-                                </button>
+                                <Link to='/account/founder/analytics' onClick={() => setIsOpen(false)}>
+                                    <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
+                                        <FontAwesomeIcon icon={faChartLine} className='' />
+                                        <span className='text-[1.1rem]'>Analytics</span>
+                                    </button>
+                                </Link>
                             </li>
                             <li>
-                                <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
-                                    <FontAwesomeIcon icon={faComment} className='' />
-                                    <span className='text-[1.1rem]'>Feedback</span>
-                                </button>
+                                <Link to='/account/founder/feedback' onClick={() => setIsOpen(false)}>
+                                    <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
+                                        <FontAwesomeIcon icon={faComment} className='' />
+                                        <span className='text-[1.1rem]'>Feedback</span>
+                                    </button>
+                                </Link>
                             </li>
                         </ul>
                     </div>
