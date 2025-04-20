@@ -6,8 +6,7 @@ import {
     signInWithEmailAndPassword,
     GoogleAuthProvider,
     signInWithPopup,
-    signInWithRedirect,
-    getRedirectResult,
+    sendSignInLinkToEmail,
     onAuthStateChanged,
     signOut,
     updateProfile,
@@ -15,15 +14,12 @@ import {
 import {
     getFirestore,
     doc,
-    getDoc,
-    setDoc,
-    collection,
-    addDoc,
-    getDocs,
-    query,
-    where,
+    getDoc, setDoc,
+    collection, addDoc,
+    getDocs, query, where
 } from "firebase/firestore";
 
+// Removed duplicate declaration of useFirebase
 const FirebaseContext = createContext(null);
 
 const firebaseConfig = {
@@ -42,103 +38,38 @@ const firestore = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
-// Utility: Detect mobile device
-const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
 export const FirebaseProvider = (props) => {
+
     const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        onAuthStateChanged(auth, user => {
+            if (user) setUser(user);
+            else setUser(null)
+
+        });
+    }, [])
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-            setUser(user || null);
+            if (user) {
+                setUser(user);
+            } else {
+                setUser(null);
+            }
             setLoading(false);
         });
     }, []);
 
-    // 🔁 Run only on redirect back from Google (mobile)
-    useEffect(() => {
-        getRedirectResult(auth).then(async (result) => {
-            if (result) {
-                const user = result.user;
-                const role = sessionStorage.getItem("choice");
-                const navigateTo = sessionStorage.getItem("redirectTo");
-
-                if (!role || !navigateTo) {
-                    alert("Missing role or redirect path. Please sign up again.");
-                    await signOut(auth);
-                    return;
-                }
-
-                await handleUserAfterGoogleSignup(user, role, navigateTo);
-            }
-        });
-    }, []);
-
-    // 🔁 Shared logic for new Google user
-    const handleUserAfterGoogleSignup = async (user, role, navigate) => {
-        const founderRef = doc(firestore, "Founder", user.uid);
-        const investorRef = doc(firestore, "Investor", user.uid);
-
-        const [founderSnap, investorSnap] = await Promise.all([
-            getDoc(founderRef),
-            getDoc(investorRef),
-        ]);
-
-        if (
-            (role === "Founder" && investorSnap.exists()) ||
-            (role === "Investor" && founderSnap.exists())
-        ) {
-            alert(
-                `This Gmail is already registered as a ${role === "Founder" ? "Investor" : "Founder"}. Please log in instead.`
-            );
-            await user.delete();
-            await signOut(auth);
-            return;
-        }
-
-        const roleRef = doc(firestore, role, user.uid);
-        const roleSnap = await getDoc(roleRef);
-
-        if (roleSnap.exists()) {
-            alert("You already have an account.");
-            navigate("/");
-        } else {
-            const nameParts = user.displayName?.split(" ") || [];
-            const userData = {
-                uid: user.uid,
-                email: user.email,
-                name: nameParts[0] || "",
-                lastName: nameParts.slice(1).join(" ") || "",
-                photoURL: user.photoURL,
-                role: role,
-                createdAt: new Date().toISOString(),
-                provider: "google",
-            };
-
-            await setDoc(roleRef, userData);
-            alert("Signup successful!");
-            navigate(`/account/${role.toLowerCase()}/profile`);
-        }
-    };
-
-    const signupUserWithEmailAndPassword = async (
-        email,
-        password,
-        name,
-        lastName,
-        navigate
-    ) => {
+    const signupUserWithEmailAndPassword = async (email, password, name, lastName, navigate) => {
         try {
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
             await updateProfile(user, {
-                displayName: `${name} ${lastName}`,
+                displayName: `${name} ${lastName}`
             });
 
             const role = JSON.parse(localStorage.getItem("form"))?.role1;
@@ -156,7 +87,7 @@ export const FirebaseProvider = (props) => {
                 role,
                 createdAt: new Date().toISOString(),
                 provider: "email",
-                password,
+                password
             };
 
             await setDoc(userRef, userData);
@@ -167,17 +98,22 @@ export const FirebaseProvider = (props) => {
             alert(error.message);
         }
     };
+    // export { signupUserWithEmailAndPassword };
+
+    // const signinUserWithEmailAndPass = (email, password) =>
+    //     signInWithEmailAndPassword(auth, email, password);
 
     const signinUserWithEmailAndPass = async (email, password) => {
         const result = await signInWithEmailAndPassword(auth, email, password);
         const user = result.user;
 
+        // 🔍 Check both 'Founder' and 'Investor' collections
         const founderRef = doc(firestore, "Founder", user.uid);
         const investorRef = doc(firestore, "Investor", user.uid);
 
         const [founderSnap, investorSnap] = await Promise.all([
             getDoc(founderRef),
-            getDoc(investorSnap),
+            getDoc(investorRef),
         ]);
 
         if (founderSnap.exists()) {
@@ -185,27 +121,71 @@ export const FirebaseProvider = (props) => {
         } else if (investorSnap.exists()) {
             return { user, role: "Investor" };
         } else {
-            throw new Error(
-                "User not found in either Founder or Investor collections."
-            );
+            throw new Error("User not found in either Founder or Investor collections.");
         }
     };
 
     const signupWithGoogle = async (navigate, role) => {
         try {
-            sessionStorage.setItem("choice", role);
-            sessionStorage.setItem("redirectTo", navigate); // you might update this to a route string
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
 
-            if (isMobile()) {
-                await signInWithRedirect(auth, googleProvider);
+            if (!role) {
+                alert("Role not specified.");
+                return;
+            }
+
+            // Check if this Gmail is already registered under *either* role
+            const founderRef = doc(firestore, "Founder", user.uid);
+            const investorRef = doc(firestore, "Investor", user.uid);
+
+            const [founderSnap, investorSnap] = await Promise.all([
+                getDoc(founderRef),
+                getDoc(investorRef),
+            ]);
+
+            if (
+                (role === "Founder" && investorSnap.exists()) ||
+                (role === "Investor" && founderSnap.exists())
+            ) {
+                alert(
+                    `This Gmail is already registered as a ${role === "Founder" ? "Investor" : "Founder"}. Please log in instead.`
+                );
+                await signOut(auth);
+                return;
+            }
+
+            // Proceed only if NOT already registered
+            const roleRef = doc(firestore, role, user.uid);
+            const roleSnap = await getDoc(roleRef);
+
+            if (roleSnap.exists()) {
+                alert("You already have an account.");
+                navigate("/");
             } else {
-                const result = await signInWithPopup(auth, googleProvider);
-                const user = result.user;
-                await handleUserAfterGoogleSignup(user, role, navigate);
+                const nameParts = user.displayName?.split(" ") || [];
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    name: nameParts[0] || "",
+                    lastName: nameParts.slice(1).join(" ") || "",
+                    photoURL: user.photoURL,
+                    role: role,
+                    createdAt: new Date().toISOString(),
+                    provider: "google",
+                };
+
+                await setDoc(roleRef, userData);
+                alert("Signup successful!");
+                navigate(`/account/${role.toLowerCase()}/profile`);
             }
         } catch (error) {
-            console.error("Google Signup Error:", error);
-            alert("Something went wrong during Google signup.");
+            if (error.code === 'auth/popup-blocked') {
+                alert('Please allow popups from this website to complete the Google signin process.');
+            } else {
+                console.error('Google Signup Error:', error);
+                alert('Something went wrong during Google signin. Please try again.');
+            }
         }
     };
 
@@ -217,17 +197,22 @@ export const FirebaseProvider = (props) => {
             const founderSnap = await getDoc(doc(firestore, "Founder", user.uid));
             const investorSnap = await getDoc(doc(firestore, "Investor", user.uid));
 
-            if (founderSnap.exists()) {
-                alert("Login successful!");
-                navigate(`/account/founder/profile`);
-            } else if (investorSnap.exists()) {
-                alert("Login successful!");
-                navigate(`/account/investor/profile`);
+            if (founderSnap.exists() || investorSnap.exists()) {
+                if (founderSnap.exists()) {
+                    const role = founderSnap.data().role;
+                    alert("Login successful!");
+                    navigate(`/account/founder/profile`);
+                }
+                if (investorSnap.exists()) {
+                    const role = investorSnap.data().role;
+                    alert("Login successful!");
+                    navigate(`/account/investor/profile`);
+                }
             } else {
                 await user.delete();
                 await signOut(auth);
                 alert("You are not registered. Please sign up first.");
-                navigate("/");
+                navigate(`/account/${role.toLowerCase()}/profile`);
             }
         } catch (error) {
             console.error("Google Sign-In Error:", error);
@@ -235,21 +220,12 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    const handleCreateNewPitch = async (
-        pitch,
-        PitchDetails,
-        category,
-        funding_goal,
-        tags
-    ) => {
-        const tagArray =
-            typeof tags === "string"
-                ? tags.split(",").map((tag) => tag.trim()).filter(Boolean)
-                : Array.isArray(tags)
-                    ? tags
-                    : [];
+    const handleCreateNewPitch = async (pitch, PitchDetails, category, funding_goal, tags,) => {
+        const tagArray = typeof tags === 'string'
+            ? tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+            : Array.isArray(tags) ? tags : [];
+        await addDoc(collection(firestore, 'Pitchs'), {
 
-        await addDoc(collection(firestore, "Pitchs"), {
             pitch,
             PitchDetails,
             category,
@@ -259,45 +235,54 @@ export const FirebaseProvider = (props) => {
             userEmail: user.email,
             diaplayName: user.displayName,
             photoURL: user.photoURL,
-        });
+
+        })
     };
 
     const fetchMyPitch = async (uid) => {
-        const collectionRef = collection(firestore, "Founder");
-        const q = query(collectionRef, where("uid", "==", uid));
+        const collectionRef = collection(firestore, 'Founder');
+        const q = query(collectionRef, where('uid', '==', uid));
         const result = await getDoc(q);
         return result;
     };
 
     const listAllPitchs = () => {
-        return getDocs(collection(firestore, "Pitchs"));
-    };
+        return getDocs(collection(firestore, 'Pitchs'))
+    }
 
     const getPitchByID = async (id) => {
-        const docRef = doc(firestore, "Pitchs", id);
+        const docRef = doc(firestore, 'Pitchs', id);
         const result = await getDoc(docRef);
         return result;
-    };
+    }
 
-    const isLoggedIn = !!user;
+    // const yourPitch = async (PitchDetails, qty) =>{
+    //   const collectionRef = collection(firestore, 'Founder', Your_Pitch);
+    //   const result = await addDoc(collectionRef, {
 
-    return (
-        <FirebaseContext.Provider
-            value={{
-                signupUserWithEmailAndPassword,
-                signinUserWithEmailAndPass,
-                signupWithGoogle,
-                signinWithGoogle,
-                isLoggedIn,
-                user,
-                loading,
-                handleCreateNewPitch,
-                fetchMyPitch,
-                listAllPitchs,
-                getPitchByID,
-            }}
-        >
-            {props.children}
-        </FirebaseContext.Provider>
-    );
+    //   })
+
+    // }
+
+    // export const useFirebase = () => useContext(FirebaseContext);
+
+    const isLoggedIn = user ? true : false;
+
+    return <FirebaseContext.Provider
+        value={{
+            signinWithGoogle,
+            signupWithGoogle,
+            signupUserWithEmailAndPassword,
+            signinUserWithEmailAndPass,
+            isLoggedIn,
+            user,
+            loading,
+            handleCreateNewPitch,
+            fetchMyPitch,
+            listAllPitchs,
+            getPitchByID
+        }}
+    >
+        {props.children}
+    </FirebaseContext.Provider>
 };
