@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import { fadeInUp } from '../utils/motion'
 import HeroSec from '../components/HeroSec'
 import tempImg from "../assets/tempImg.jpg";
+import getmatch from "../assets/getmatch.png";
+import analytics from "../assets/analytics.png";
 import uploadPitchImg from "../assets/uploadPitchImg.png";
 import realTimeImg from "../assets/realTimeImg.png";
 import feedbackImg from "../assets/feedbackImg.png";
@@ -46,8 +48,8 @@ export const Home = () => {
                                 </div>
                             </div>
                             <div className='flex flex-col sm:text-end sm:flex-row w-full sm:gap-[3rem]'>
-                                <div className='w-[85%] xl:w-[45%] sm:w-[45%]'>
-                                    <img src={tempImg} alt="step-3 img" className='w-full h-full object-cover rounded-3xl mb-[1rem]' />
+                                <div className='w-[85%] xl:w-[45%] glow-border sm:w-[45%]'>
+                                    <img src={getmatch} alt="step-3 img" className='w-full h-full object-fill rounded-[0.5rem] mb-[1rem]' />
                                 </div>
                                 <div className='flex flex-col sm:w-[55%] xl:w-[55%]'>
                                     <span className='font-Light tablet:text-[1.2rem] xl:text-[1.3rem] text-[1.1rem] text-txt-gray-black'>Step 2</span>
@@ -56,8 +58,8 @@ export const Home = () => {
                                 </div>
                             </div>
                             <div className='flex flex-col sm:flex-row-reverse w-full sm:gap-[3rem]'>
-                                <div className='w-[85%] xl:w-[45%] sm:w-[45%]'>
-                                    <img src={tempImg} alt="step-3 img" className='w-full h-full object-cover rounded-3xl mb-[1rem]' />
+                                <div className='w-[85%] xl:w-[45%] glow-border sm:w-[45%]'>
+                                    <img src={analytics} alt="step-3 img" className='w-full h-full object-cover rounded-3xl mb-[1rem]' />
                                 </div>
                                 <div className='flex flex-col sm:w-[55%] xl:w-[55%]'>
                                     <span className='font-Light tablet:text-[1.2rem] xl:text-[1.3rem] text-[1.1rem] text-txt-gray-black'>Step 3</span>
