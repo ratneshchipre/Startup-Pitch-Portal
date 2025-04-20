@@ -27,10 +27,15 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await firebase.signinUserWithEmailAndPass(email, password);
-      const role = JSON.parse(localStorage.getItem("form"))?.role1;
+      // await firebase.signinUserWithEmailAndPass(email, password);
+      // const role = JSON.parse(localStorage.getItem("form"))?.role1;
+      // alert("Login successful!");
+      // navigate(`/account/${role.toLowerCase()}/profile`);
+
+      const { role } = await firebase.signinUserWithEmailAndPass(email, password);
       alert("Login successful!");
       navigate(`/account/${role.toLowerCase()}/profile`);
+
     } catch (error) {
       console.error("Login failed:", error);
       alert("Invalid credentials. Please try again.");
@@ -42,6 +47,9 @@ const Login = () => {
     const role = JSON.parse(localStorage.getItem("form"))?.role1;
     await firebase.signinWithGoogle(role, navigate);
   };
+
+
+
 
   return (
     <div className='flex flex-col justify-center items-center px-[2rem]'>

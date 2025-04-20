@@ -39,6 +39,7 @@ const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
 export const FirebaseProvider = (props) => {
+
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -99,8 +100,30 @@ export const FirebaseProvider = (props) => {
     };
     // export { signupUserWithEmailAndPassword };
 
-    const signinUserWithEmailAndPass = (email, password) =>
-        signInWithEmailAndPassword(auth, email, password);
+    // const signinUserWithEmailAndPass = (email, password) =>
+    //     signInWithEmailAndPassword(auth, email, password);
+
+    const signinUserWithEmailAndPass = async (email, password) => {
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        const user = result.user;
+      
+        // 🔍 Check both 'Founder' and 'Investor' collections
+        const founderRef = doc(firestore, "Founder", user.uid);
+        const investorRef = doc(firestore, "Investor", user.uid);
+      
+        const [founderSnap, investorSnap] = await Promise.all([
+          getDoc(founderRef),
+          getDoc(investorRef),
+        ]);
+      
+        if (founderSnap.exists()) {
+          return { user, role: "Founder" };
+        } else if (investorSnap.exists()) {
+          return { user, role: "Investor" };
+        } else {
+          throw new Error("User not found in either Founder or Investor collections.");
+        }
+      };
 
     const signupWithGoogle = async (navigate, role) => {
         try {
@@ -197,13 +220,22 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    const handleCreateNewPitch = async (pitch, PitchDetails, category, funding_goal, tags) => {
+    const handleCreateNewPitch = async (pitch, PitchDetails, category, funding_goal, tags,) => {
+        const tagArray = typeof tags === 'string'
+            ? tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+            : Array.isArray(tags) ? tags : [];
         await addDoc(collection(firestore, 'Pitchs'), {
+
             pitch,
             PitchDetails,
             category,
             funding_goal,
-            tags
+            tags: tagArray,
+            userID: user.uid,
+            userEmail: user.email,
+            diaplayName: user.displayName,
+            photoURL: user.photoURL,
+
         })
     };
 
@@ -248,6 +280,7 @@ export const FirebaseProvider = (props) => {
             handleCreateNewPitch,
             fetchMyPitch,
             listAllPitchs,
+            getPitchByID
         }}
     >
         {props.children}

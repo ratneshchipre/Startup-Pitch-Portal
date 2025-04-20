@@ -53,9 +53,10 @@ const App = () => {
           <Route path='/account/:role/analytics' element={<Analytics />} />
           <Route path='/account/:role/feedback' element={<Feedback />} />
           <Route path='/account/:role/find-pitches' element={<FindPitches />} />
-          <Route path='/account/:role/pitch-id-11' element={<PitchDetails />} />
+          <Route path="/account/:role/pitch/id/:pitchID" element={<PitchDetails />} />
           <Route path='/account/:role/saved-pitches' element={<SavedPitches />} />
           <Route path='/account/:role/my-investments' element={<MyInvestments />} />
+          <Route path='/account/:role/ResetPassword' element={<ResetPassword />} />
         </Route>
 
       </Routes>
