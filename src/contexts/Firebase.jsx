@@ -10,6 +10,7 @@ import {
     onAuthStateChanged,
     signOut,
     updateProfile,
+    sendPasswordResetEmail
 } from "firebase/auth";
 import {
     getFirestore,
@@ -266,6 +267,10 @@ export const FirebaseProvider = (props) => {
 
     // export const useFirebase = () => useContext(FirebaseContext);
 
+    const resetPassword = (email) => {
+        return sendPasswordResetEmail(auth, email);
+    };
+
     const isLoggedIn = user ? true : false;
 
     return <FirebaseContext.Provider
@@ -280,7 +285,8 @@ export const FirebaseProvider = (props) => {
             handleCreateNewPitch,
             fetchMyPitch,
             listAllPitchs,
-            getPitchByID
+            getPitchByID,
+            resetPassword
         }}
     >
         {props.children}

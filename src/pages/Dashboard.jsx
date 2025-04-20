@@ -22,6 +22,7 @@ const Dashboard = () => {
 
     const [userEmail, setUserEmail] = useState(null);
     const [userName, setUserName] = useState(null);
+    const [userPhoto, setUserPhoto] = useState(null);
 
     useEffect(() => {
         const auth = getAuth();
@@ -30,6 +31,7 @@ const Dashboard = () => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 setUserEmail(user.email);
+                setUserPhoto(user.photoURL);
 
                 // Try to get displayName first
                 if (user.displayName) {
@@ -67,7 +69,7 @@ const Dashboard = () => {
             <div className={`fixed top-0 left-0 h-full bg-nav-white border-r-dash-border border-r-[2px] transition-all duration-300 ease-in-out w-[70%] mobile:w-[20rem] overflow-hidden z-50 mini-desktop:fixed ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} mini-desktop:opacity-100 mini-desktop:pointer-events-auto shadow-2xl mini-desktop:shadow-lg`}>
                 <div className='mt-[5.5rem] flex flex-col items-center justify-center border-b-dash-border border-b-[2px] pb-[1.2rem] px-[3rem]'>
                     <div className='flex w-[5rem] rounded-[50%] flex-col items-center justify-center'>
-                        <img src={avatarImg} alt="avatar" className='h-full w-full object-cover bg-center' />
+                        <img src={`${userPhoto ? userPhoto : avatarImg}`} alt="avatar" className='h-full w-full rounded-[50%] object-cover bg-center' />
                     </div>
                     <div className='flex flex-col w-auto justify-center items-center mt-[1rem]'>
                         <h2 className='font-Medium text-txt-black text-center text-[1.1rem] line-clamp-1 overflow-hidden [-webkit-box-orient:vertical] [display:-webkit-box]'>{userName}</h2>
@@ -122,7 +124,7 @@ const Dashboard = () => {
                         </ul>
                     </div>
                     <div className={`w-full font-Medium flex flex-col ${role === 'founder' ? 'mt-[3.5rem]' : 'mt-[7rem]'}  text-features gap-[0.4rem]`}>
-                        <Link to='/user/founder/settings'>
+                        <Link to='/account/:role/ResetPassword'>
                             <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
                                 <FontAwesomeIcon icon={faGear} className='' />
                                 <span className='text-[1.1rem]'>Settings</span>

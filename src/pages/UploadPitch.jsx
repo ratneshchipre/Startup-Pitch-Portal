@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useFirebase } from '../contexts/Firebase';
+import { categories } from "../categoryList";
 
 const UploadPitch = () => {
 
@@ -9,10 +10,6 @@ const UploadPitch = () => {
     const [category, setcategory] = useState('');
     const [fundinggoles, setfundinggoles] = useState('');
     const [usetags, setusetags] = useState('');
-
-
-
-
 
     const handlePitchSubmit = async (e) => {
         e.preventDefault();
@@ -26,6 +23,29 @@ const UploadPitch = () => {
 
         )
     };
+
+    //cludenary api
+    const [loading, setLoading] = useState(false)
+    const handleFileUpload = async (event) => {
+        const file = event.target.files[0]
+
+        if (!file) return
+        setLoading(true)
+        const data = new FormData()
+        data.append('file', file)
+        data.append('upload_preset', 'om-prbal')
+        data.append('cloud_name', 'dadlmfhco')
+
+        const res = await fetch('https://api.cloudinary.com/v1_1/dadlmfhco/video/upload', {
+            method: 'POST',
+            body: data
+        })
+
+        const uploadedImageURL = await res.json();
+        console.log(uploadedImageURL.url);
+        setLoading(false)
+
+    }
 
     return (
         <div className='w-full flex flex-col px-[2rem] py-[1rem] h-[20rem]'>
@@ -42,16 +62,16 @@ const UploadPitch = () => {
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Upload File</label>
-                        <input type="file" className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px] cursor-pointer' />
+                        {loading ? 'Uploading' : <input onChange={handleFileUpload} type="file" className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px] cursor-pointer' />}
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Pitch Category</label>
                         <select onChange={e => setcategory(e.target.value)} value={category} className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]'>
-                            <option value="Choose a category">Choose a category</option>
-                            <option value="tech">Tech</option>
-                            <option value="medical">Medical</option>
-                            <option value="Choose a category">Choose a category</option>
-                            <option value="Choose a category">Choose a category</option>
+                            {categories.map((category, index) => (
+                                <option key={index} value={category}>
+                                    {category}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
