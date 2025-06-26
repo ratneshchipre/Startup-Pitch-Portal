@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Gt-walshiem-Medium";
+  src: url(../public/GT-Walsheim-Medium.otf);
+}
+
+@font-face {
+  font-family: "Gt-walshiem-Bold";
+  src: url(../public/GT-Walsheim-Bold.otf);
+}
+@font-face {
+  font-family: "Gt-walshiem-Light";
+  src: url(../public/GT-Walsheim-Light.otf);
+}
+
+@font-face {
+  font-family: "Gt-walshiem-Regular";
+  src: url(../public/GT-Walsheim-Regular.otf);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@theme {
+  --font-Medium: "Gt-walshiem-Medium", "sans-serif";
+  --font-Bold: "Gt-walshiem-Bold", "sans-serif";
+  --font-Light: "Gt-walshiem-Light", "sans-serif";
+  --font-Regular: "Gt-walshiem-Regular", "sans-serif";
+  --color-nav-white: #ffffff;
+  --color-txt-black: #2b2a35;
+  --color-txt-gray-black: #4a5260;
+  --color-cream-white: #f6f4f1;
+  --color-btn-blue: #0ea5e9;
+  --color-hover-blue: #2394c6;
+  --color-sec-blue: #1e40af;
+  --color-footer: #181818;
+  --color-signin: #f7f7f8;
+  --color-border: #a7a6a6;
+  --color-dash-bg: #f8fdfc;
+  --color-dash-border: #e8e8e8;
+  --color-features: #868686;
+  --breakpoint-mobile: 480px;
+  --breakpoint-tablet: 550px;
+  --breakpoint-tablet-2: 700px;
+  --breakpoint-mini-desktop: 900px;
+}
+
+.glow-border {
+  position: relative;
+  z-index: 0;
+}
+
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 4px;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #9da88f, #e3caa5, #d4b483);
+  background-size: 600% 600%;
+  animation: animateBorder 8s ease infinite;
+  z-index: -1;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+}
+
+@keyframes animateBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.fade-bottom-mask img {
+  mask-image: linear-gradient(to top, transparent 0%, black 35%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 35%);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
