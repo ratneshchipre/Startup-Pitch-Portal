@@ -1,68 +1,52 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import headLogo from "../assets/headLogo(black).png";
 import googleImg from "../assets/googleImg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useStartupContext } from "../contexts/StartupContext";
-import { useFirebase } from "../contexts/Firebase";
+import axios from "axios";
+
+type SignupFormDataType = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: string;
+};
 
 const Signup = () => {
-  const [role, setRole] = useState("Select a role");
-
-  const firebase = useFirebase();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState<SignupFormDataType>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    role: "Select a role",
+  });
 
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [signupEnabled, setSignupEnabled] = useState(false);
-
-  useEffect(() => {
-    setSignupEnabled(
-      name &&
-        lastName &&
-        email.endsWith("@gmail.com") &&
-        password.length >= 6 &&
-        (role === "Sign Up as a Founder" || role === "Sign Up as an Investor")
-    );
-  }, [role, email, password, name, lastName]);
-
-  const saveFormToLocalStorage = () => {
-    const form = {
-      email1: email,
-      name1: name,
-      lastName1: lastName,
-      password1: password,
-      role1: role.includes("Founder") ? "Founder" : "Investor",
-    };
-    localStorage.setItem("form", JSON.stringify(form));
-    sessionStorage.setItem("choice", form.role1);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleGoogleLogin = async () => {
-    const selectedRole =
-      role === "Sign Up as a Founder"
-        ? "Founder"
-        : role === "Sign Up as an Investor"
-        ? "Investor"
-        : null;
-
-    if (!selectedRole) {
-      alert("Please select a role first");
-      return;
-    }
-
-    sessionStorage.setItem("choice", selectedRole); // optional fallback
-    await firebase.signupWithGoogle(navigate, selectedRole);
-  };
-
-  const handleFormSubmit = (e) => {
+  const handleSignupForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!signupEnabled) return;
-    saveFormToLocalStorage();
-    navigate("/account/signup/otp-verification");
+
+    try {
+      const response = await axios.post("/api/user/signup", {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role.split(" ").pop(),
+      });
+      console.log(response);
+      if (response.data.success === true) {
+        navigate(`/account/${response.data.user.role.toLowerCase()}/profile`);
+      }
+    } catch (error) {}
   };
 
   return (
@@ -80,38 +64,41 @@ const Signup = () => {
           </p>
           <div className="flex w-full gap-[0.5rem]">
             <button
-              className={`flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] py-[0.5rem] px-[0.9rem] rounded-xl cursor-pointer hover:border-txt-black focus:bg-btn-blue focus:text-nav-white focus:border-btn-blue ${
-                role === "founder"
-                  ? "bg-btn-blue border-btn-blue text-white"
-                  : ""
-              } ${role === "founder" ? "text-nav-white" : ""}`}
-              onClick={() => setRole("Sign Up as a Founder")}
+              className={`flex w-full justify-center items-center mt-[1.5rem] font-Regular border-[1px] py-[0.5rem] px-[0.9rem] rounded-xl cursor-pointer hover:border-txt-black focus:bg-btn-blue focus:text-nav-white focus:border-btn-blue ${
+                formData.role === "Sign up as a Founder"
+                  ? "bg-btn-blue border-btn-blue text-nav-white"
+                  : "border-border text-txt-gray-black"
+              }`}
+              onClick={() =>
+                setFormData({ ...formData, role: "Sign up as a Founder" })
+              }
             >
               Join as a Founder
             </button>
             <button
-              className={`flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] py-[0.5rem] px-[0.9rem] rounded-xl cursor-pointer hover:border-txt-black focus:bg-btn-blue focus:text-nav-white focus:border-btn-blue ${
-                role === "investor"
-                  ? "bg-btn-blue border-btn-blue text-white"
-                  : ""
-              } ${role === "investor" ? "text-nav-white" : ""}`}
-              onClick={() => setRole("Sign Up as an Investor")}
+              className={`flex w-full justify-center items-center mt-[1.5rem] font-Regular border-[1px] py-[0.5rem] px-[0.9rem] rounded-xl cursor-pointer hover:border-txt-black ${
+                formData.role === "Sign up as an Investor"
+                  ? "focus:bg-btn-blue focus:text-nav-white focus:border-btn-blue"
+                  : "text-txt-gray-black border-border"
+              }`}
+              onClick={() =>
+                setFormData({ ...formData, role: "Sign up as an Investor" })
+              }
             >
               Join as an Investor
             </button>
           </div>
           <button
             className={`flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] py-[0.5rem] px-[0.4rem] rounded-xl ${
-              role === "Sign Up as a Founder" ||
-              role === "Sign Up as an Investor"
+              formData.role === "Sign up as a Founder" ||
+              formData.role === "Sign up as an Investor"
                 ? "cursor-pointer hover:border-txt-black"
                 : "cursor-not-allowed opacity-50 hover:border-border"
             }`}
-            onClick={handleGoogleLogin}
             disabled={
               !(
-                role === "Sign Up as a Founder" ||
-                role === "Sign Up as an Investor"
+                formData.role === "Sign up as a Founder" ||
+                formData.role === "Sign up as an Investor"
               )
             }
           >
@@ -129,62 +116,67 @@ const Signup = () => {
             </span>
           </div>
           <form
-            onSubmit={handleFormSubmit}
+            onSubmit={handleSignupForm}
             className="w-full flex flex-col justify-center items-center"
           >
             <div className="flex flex-col items-start w-full font-Regular mt-[1rem]">
               <label className="text-[1.1rem]">First Name</label>
               <input
                 type="text"
+                required
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
                 placeholder="Enter your first name"
                 className="border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
               />
             </div>
             <div className="flex flex-col items-start w-full font-Regular mt-[1rem]">
               <label className="text-[1.1rem]">Last Name</label>
               <input
                 type="text"
+                required
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
                 placeholder="Enter your last name"
                 className="border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                required
               />
             </div>
             <div className="flex flex-col items-start w-full font-Regular mt-[1rem]">
               <label className="text-[1.1rem]">Email address</label>
               <input
                 type="email"
+                required
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Enter your email address"
                 className="border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
             <div className="flex flex-col items-start w-full font-Regular mt-[1rem]">
               <label className="text-[1.1rem]">Password</label>
               <input
                 type="password"
+                required
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Enter your password"
                 className="border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
               />
             </div>
             <button
               type="submit"
-              className={`font-Regular mt-[1.5rem] bg-border text-nav-white w-full py-[0.5rem] text-center rounded-lg cursor-not-allowed transition ${
-                signupEnabled
-                  ? "cursor-pointer bg-btn-blue"
-                  : "cursor-not-allowed"
+              className={`font-Regular mt-[1.5rem] text-nav-white w-full py-[0.5rem] text-center rounded-lg cursor-not-allowed transition ${
+                formData.role === "Sign up as a Founder" ||
+                formData.role === "Sign up as an Investor"
+                  ? "bg-btn-blue cursor-pointer"
+                  : "bg-border cursor-not-allowed"
               }`}
             >
-              {role}
+              {formData.role}
               <FontAwesomeIcon icon={faCaretRight} className="ml-[0.5rem]" />
             </button>
           </form>

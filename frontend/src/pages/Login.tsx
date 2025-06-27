@@ -1,52 +1,50 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import headLogo from "../assets/headLogo(black).png";
 import googleImg from "../assets/googleImg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useFirebase } from "../contexts/Firebase";
 
 const Login = () => {
   const navigate = useNavigate();
-  const firebase = useFirebase();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [logInEnabled, setLogInEnabled] = useState(false);
 
-  useEffect(() => {
-    setLogInEnabled(
-      email && email.endsWith("@gmail.com") && password.length >= 6
-    );
-  }, [email, password]);
+  // useEffect(() => {
+  //   setLogInEnabled(
+  //     email && email.endsWith("@gmail.com") && password.length >= 6
+  //   );
+  // }, [email, password]);
 
-  const handleLogIn = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      // await firebase.signinUserWithEmailAndPass(email, password);
-      // const role = JSON.parse(localStorage.getItem("form"))?.role1;
-      // alert("Login successful!");
-      // navigate(`/account/${role.toLowerCase()}/profile`);
+  // const handleLogIn = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     // await firebase.signinUserWithEmailAndPass(email, password);
+  //     // const role = JSON.parse(localStorage.getItem("form"))?.role1;
+  //     // alert("Login successful!");
+  //     // navigate(`/account/${role.toLowerCase()}/profile`);
 
-      const { role } = await firebase.signinUserWithEmailAndPass(
-        email,
-        password
-      );
-      alert("Login successful!");
-      navigate(`/account/${role.toLowerCase()}/profile`);
-    } catch (error) {
-      console.error("Login failed:", error);
-      alert("Invalid credentials. Please try again.");
-    }
-    setLoading(false);
-  };
+  //     const { role } = await firebase.signinUserWithEmailAndPass(
+  //       email,
+  //       password
+  //     );
+  //     alert("Login successful!");
+  //     navigate(`/account/${role.toLowerCase()}/profile`);
+  //   } catch (error) {
+  //     console.error("Login failed:", error);
+  //     alert("Invalid credentials. Please try again.");
+  //   }
+  //   setLoading(false);
+  // };
 
-  const handleGoogleLogin = async () => {
-    const role = JSON.parse(localStorage.getItem("form"))?.role1;
-    await firebase.signinWithGoogle(role, navigate);
-  };
+  // const handleGoogleLogin = async () => {
+  //   const role = JSON.parse(localStorage.getItem("form"))?.role1;
+  //   await firebase.signinWithGoogle(role, navigate);
+  // };
 
   return (
     <div className="flex flex-col justify-center items-center px-[2rem]">
@@ -62,7 +60,7 @@ const Login = () => {
             Welcome back! Please log in to continue
           </p>
           <button
-            onClick={handleGoogleLogin}
+            // onClick={handleGoogleLogin}
             className="flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] px-[0.4rem] py-[0.5rem] rounded-xl cursor-pointer hover:border-txt-black"
           >
             <img
@@ -79,7 +77,7 @@ const Login = () => {
             </span>
           </div>
           <form
-            onSubmit={handleLogIn}
+            // onSubmit={handleLogIn}
             className="w-full flex flex-col justify-center items-center"
           >
             <div className="flex flex-col items-start w-full font-Regular mt-[1rem]">

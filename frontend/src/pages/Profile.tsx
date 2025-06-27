@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
-import { countries } from "../countryList.js";
+import { useState, useEffect } from "react";
+import { countries } from "../countryList";
 
 const Profile = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -14,68 +12,18 @@ const Profile = () => {
   const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
 
-  useEffect(() => {
-    const auth = getAuth();
-    const db = getFirestore();
+  
 
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUid(user.uid);
-        setUserEmail(user.email);
+    
+  
 
-        const roles = ["Founder", "Investor"];
-        for (const r of roles) {
-          const docRef = doc(db, r, user.uid);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            setUserName(`${data.name} ${data.lastName}`);
-            setAddress(data.address || "");
-            setCountry(data.country || "");
-            setCity(data.city || "");
-            setPhone(data.phone || "");
-            setRole(r);
-            break;
-          }
-        }
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const handleSaveChanges = async (e) => {
-    e.preventDefault();
-    if (!uid || !role) return;
-
-    const db = getFirestore();
-    const userRef = doc(db, role, uid);
-    try {
-      await setDoc(
-        userRef,
-        {
-          address,
-          country,
-          city,
-          phone,
-        },
-        { merge: true }
-      );
-
-      alert("Profile updated successfully!");
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
-    }
-  };
-
-  function toTitleCase(str) {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  }
+  // function toTitleCase(str) {
+  //   return str
+  //     .toLowerCase()
+  //     .split(" ")
+  //     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  //     .join(" ");
+  // }
 
   return (
     <div className="w-full flex flex-col px-[2rem] py-[1rem]">
@@ -84,7 +32,7 @@ const Profile = () => {
           Personal Information
         </h1>
         <form
-          onSubmit={handleSaveChanges}
+          // onSubmit={handleSaveChanges}
           className="mt-[1.4rem] flex flex-col bg-cream-white border-dash-border border-[2px] px-[1.5rem] py-[1.5rem] rounded-lg gap-[1.5rem]"
         >
           <div className="flex flex-col gap-[0.5rem]">
@@ -92,7 +40,7 @@ const Profile = () => {
               Full Name
             </label>
             <input
-              value={toTitleCase(userName)}
+              // value={toTitleCase(userName)}
               type="text"
               disabled
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"

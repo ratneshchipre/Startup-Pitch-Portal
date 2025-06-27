@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { fadeInUp } from "../utils/motion";
 import HeroSec from "../components/HeroSec";
@@ -15,12 +15,9 @@ import investorImg from "../assets/investorImg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartColumn } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useStartupContext } from "../contexts/StartupContext";
-import { useFirebase } from "../contexts/Firebase";
 
 export const Home = () => {
   const sectionRef = useRef(null);
-  const firebase = useFirebase();
   const navigate = useNavigate();
 
   return (
@@ -32,7 +29,7 @@ export const Home = () => {
         </h2>
         <div className="flex flex-col gap-[2rem] justify-center items-center mt-[1rem]">
           <motion.div
-            variants={fadeInUp}
+            // variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}

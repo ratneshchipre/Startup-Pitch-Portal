@@ -1,4 +1,5 @@
-export const countries = [
+type Countries = string;
+export const countries: Countries[] = [
   "Choose a country",
   "Afghanistan",
   "Albania",

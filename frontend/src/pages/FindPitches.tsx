@@ -1,33 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import PitchCard from "../components/PitchCard";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
-import { useFirebase } from "../contexts/Firebase";
 
 const FindPitches = () => {
-  const params = useParams();
-  const [pitch, setpitch] = useState([]);
-  const [userEmail, setUserEmail] = useState(null);
-  const [userName, setUserName] = useState(null);
-  const firebase = useFirebase();
+  // const params = useParams();
+  // const [pitch, setpitch] = useState([]);
+  // const [userEmail, setUserEmail] = useState(null);
+  // const [userName, setUserName] = useState(null);
 
-  useEffect(() => {
-    firebase.listAllPitchs().then((pitch) => setpitch(pitch.docs));
-  }, []);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserEmail(user.email);
-      } else {
-        setUserEmail(null);
-      }
-    });
-  }, []);
-
-  const auth = getAuth();
   return (
     <div className="flex flex-col w-full">
       <div className="w-full mini-desktop:w-auto px-[1.5rem] py-[1rem] mt-[4.6rem] mini-desktop:ml-[20rem]">
@@ -45,14 +27,14 @@ const FindPitches = () => {
         />
       </div>
       <div className="flex flex-col w-full pb-[1.5rem]">
-        {pitch.map((pitch) => (
+        {/* {pitch.map((pitch) => (
           <PitchCard
             link={pitch.data().link}
             key={pitch.id}
             id={pitch.id}
             {...pitch.data()}
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );

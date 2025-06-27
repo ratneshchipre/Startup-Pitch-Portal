@@ -1,6 +1,5 @@
-import React from "react";
 import { Chart as ChartJS } from "chart.js/auto";
-import { Bar } from "react-chartjs-2";
+// import { Bar } from "react-chartjs-2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Analytics = () => {

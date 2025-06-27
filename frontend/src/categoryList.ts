@@ -1,4 +1,5 @@
-export const categories = [
+type Category = string;
+export const categories: Category[] = [
   "Choose a category",
   "Technology",
   "Artificial Intelligence",

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useFirebase } from "../contexts/Firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -20,28 +19,15 @@ import {
 const PitchDetails = () => {
   const navigate = useNavigate();
   const { pitchID } = useParams();
-  const firebase = useFirebase();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const { role } = useParams();
 
   const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(null);
+  const [hover, setHover] = useState<number | null>(null);
   const [locked, setLocked] = useState(false);
 
-  useEffect(() => {
-    if (pitchID) {
-      firebase.getPitchByID(pitchID).then((value) => {
-        if (value.exists()) {
-          const pitchData = value.data();
-          setData(pitchData);
-        }
-        setLoading(false);
-      });
-    }
-  }, [firebase, pitchID]);
-
-  const handleClick = (value, e) => {
+  const handleClick = (value: number, e: React.MouseEvent) => {
     if (locked) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const isHalf = e.clientX - rect.left < rect.width / 2;
@@ -50,7 +36,7 @@ const PitchDetails = () => {
     setLocked(true);
   };
 
-  const handleMouseMove = (value, e) => {
+  const handleMouseMove = (value: number, e: React.MouseEvent) => {
     if (locked) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const isHalf = e.clientX - rect.left < rect.width / 2;
@@ -63,7 +49,7 @@ const PitchDetails = () => {
     setHover(null);
   };
 
-  const getStarClass = (value) => {
+  const getStarClass = (value: number) => {
     const activeValue = hover !== null ? hover : rating;
     if (value <= activeValue) return "text-btn-blue";
     if (value - 0.5 === activeValue) return "text-btn-blue";
@@ -78,14 +64,14 @@ const PitchDetails = () => {
     return <p className="text-center mt-10 text-red-500">Pitch not found.</p>;
   }
 
-  const tagsArray = Array.isArray(data.tags)
-    ? data.tags
-    : typeof data.tags === "string"
-    ? data.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter(Boolean)
-    : [];
+  // const tagsArray = Array.isArray(data.tags)
+  //   ? data.tags
+  //   : typeof data.tags === "string"
+  //   ? data.tags
+  //       .split(",")
+  //       .map((tag) => tag.trim())
+  //       .filter(Boolean)
+  //   : [];
 
   return (
     <div className="flex flex-col w-full">
@@ -104,10 +90,10 @@ const PitchDetails = () => {
               {/* Title + Description */}
               <div className="flex flex-col mt-[1.5rem]">
                 <h2 className="font-Medium text-txt-black text-[1.3rem]">
-                  {data.pitch || "Untitled Pitch"}
+                  {/* {data.pitch || "Untitled Pitch"} */}
                 </h2>
                 <p className="font-Regular text-txt-gray-black mt-[2rem] mb-[2rem] pb-[1.5rem] border-b-border border-b-[1px]">
-                  {data.PitchDetails || "No description provided."}
+                  {/* {data.PitchDetails || "No description provided."} */}
                 </p>
               </div>
 
@@ -123,7 +109,7 @@ const PitchDetails = () => {
                       Proposed Funding
                     </span>
                     <span className="font-Regular text-txt-gray-black">
-                      ${data.funding_goal || "Not specified"}
+                      {/* ${data.funding_goal || "Not specified"} */}
                     </span>
                   </div>
                 </div>
@@ -137,7 +123,7 @@ const PitchDetails = () => {
                       Pitch Category
                     </span>
                     <span className="font-Regular text-txt-gray-black">
-                      {data.category || "N/A"}
+                      {/* {data.category || "N/A"} */}
                     </span>
                   </div>
                 </div>
@@ -162,7 +148,7 @@ const PitchDetails = () => {
                 </div>
                 <div className="mt-[1rem] h-[22rem] w-full">
                   <img
-                    src={data.Resorce}
+                    // src={data.Resorce}
                     className="rounded-2xl h-full w-full object-cover"
                   ></img>
                 </div>
@@ -206,7 +192,7 @@ const PitchDetails = () => {
                   <h2 className="font-Medium text-txt-black">Tags</h2>
                 </div>
                 <div className="flex flex-wrap gap-y-[1.5rem] gap-x-[0.8rem]">
-                  {tagsArray.length > 0 ? (
+                  {/* {tagsArray.length > 0 ? (
                     tagsArray.map((tag, index) => (
                       <span
                         key={index}
@@ -219,7 +205,7 @@ const PitchDetails = () => {
                     <p className="font-Regular text-border">
                       No tags available.
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
 
