@@ -1,29 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { countries } from "../countryList";
 
+type ProfileFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
+  country: string;
+  city: string;
+  phone: string;
+};
+
 const Profile = () => {
-  const [userEmail, setUserEmail] = useState("");
-  const [userName, setUserName] = useState("");
-  const [uid, setUid] = useState(null);
-  const [role, setRole] = useState("");
+  const [formData, setFormData] = useState<ProfileFormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+    country: "",
+    city: "",
+    phone: "",
+  });
 
-  const [address, setAddress] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [phone, setPhone] = useState("");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    
-  
-
-  // function toTitleCase(str) {
-  //   return str
-  //     .toLowerCase()
-  //     .split(" ")
-  //     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  //     .join(" ");
-  // }
+  const handleUserProfileForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="w-full flex flex-col px-[2rem] py-[1rem]">
@@ -32,53 +47,64 @@ const Profile = () => {
           Personal Information
         </h1>
         <form
-          // onSubmit={handleSaveChanges}
+          onSubmit={handleUserProfileForm}
           className="mt-[1.4rem] flex flex-col bg-cream-white border-dash-border border-[2px] px-[1.5rem] py-[1.5rem] rounded-lg gap-[1.5rem]"
         >
           <div className="flex flex-col gap-[0.5rem]">
             <label className="font-Medium text-txt-black text-[1.2rem]">
-              Full Name
+              First Name
             </label>
             <input
-              // value={toTitleCase(userName)}
               type="text"
-              disabled
+              value={formData.firstName}
+              onChange={handleChange}
+              placeholder="Enter your first name"
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />
           </div>
-
+          <div className="flex flex-col gap-[0.5rem]">
+            <label className="font-Medium text-txt-black text-[1.2rem]">
+              Last Name
+            </label>
+            <input
+              type="text"
+              value={formData.lastName}
+              onChange={handleChange}
+              placeholder="Enter your last name"
+              className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
+            />
+          </div>
           <div className="flex flex-col gap-[0.5rem]">
             <label className="font-Medium text-txt-black text-[1.2rem]">
               Email
             </label>
             <input
-              value={userEmail}
               type="text"
-              disabled
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />
           </div>
-
           <div className="flex flex-col gap-[0.5rem]">
             <label className="font-Medium text-txt-black text-[1.2rem]">
               Address
             </label>
             <input
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
               type="text"
+              value={formData.address}
+              onChange={handleChange}
               placeholder="Enter your address"
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />
           </div>
-
           <div className="flex flex-col gap-[0.5rem]">
             <label className="font-Medium text-txt-black text-[1.2rem]">
               Country
             </label>
             <select
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
+              value={formData.country}
+              onChange={handleSelectChange}
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             >
               {countries.map((country, index) => (
@@ -88,33 +114,30 @@ const Profile = () => {
               ))}
             </select>
           </div>
-
           <div className="flex flex-col gap-[0.5rem]">
             <label className="font-Medium text-txt-black text-[1.2rem]">
               City
             </label>
             <input
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
               type="text"
+              value={formData.city}
+              onChange={handleChange}
               placeholder="Enter your city"
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />
           </div>
-
           <div className="flex flex-col gap-[0.5rem]">
             <label className="font-Medium text-txt-black text-[1.2rem]">
               Phone (with country code)
             </label>
             <input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
               type="text"
+              value={formData.phone}
+              onChange={handleChange}
               placeholder="Enter your phone number"
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />
           </div>
-
           <button className="font-Regular text-nav-white bg-btn-blue py-[0.4rem] text-[1.1rem] rounded-lg cursor-pointer hover:bg-hover-blue transition-all">
             Save Changes
           </button>

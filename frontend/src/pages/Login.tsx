@@ -1,50 +1,49 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import headLogo from "../assets/headLogo(black).png";
 import googleImg from "../assets/googleImg.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+  });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [logInEnabled, setLogInEnabled] = useState(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  // useEffect(() => {
-  //   setLogInEnabled(
-  //     email && email.endsWith("@gmail.com") && password.length >= 6
-  //   );
-  // }, [email, password]);
+  const handleLoginForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  // const handleLogIn = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     // await firebase.signinUserWithEmailAndPass(email, password);
-  //     // const role = JSON.parse(localStorage.getItem("form"))?.role1;
-  //     // alert("Login successful!");
-  //     // navigate(`/account/${role.toLowerCase()}/profile`);
-
-  //     const { role } = await firebase.signinUserWithEmailAndPass(
-  //       email,
-  //       password
-  //     );
-  //     alert("Login successful!");
-  //     navigate(`/account/${role.toLowerCase()}/profile`);
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //     alert("Invalid credentials. Please try again.");
-  //   }
-  //   setLoading(false);
-  // };
-
-  // const handleGoogleLogin = async () => {
-  //   const role = JSON.parse(localStorage.getItem("form"))?.role1;
-  //   await firebase.signinWithGoogle(role, navigate);
-  // };
+    try {
+      const response = await axios.post("/api/user/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log(response);
+      if (response.data.success === true) {
+        navigate(
+          `/account/${response.data.user.role.toLowerCase()}/${
+            response.data.user.id
+          }/profile`
+        );
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="flex flex-col justify-center items-center px-[2rem]">
@@ -59,10 +58,7 @@ const Login = () => {
           <p className="font-Regular text-txt-gray-black text-[1.1rem] text-center mt-[0.3rem]">
             Welcome back! Please log in to continue
           </p>
-          <button
-            // onClick={handleGoogleLogin}
-            className="flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] px-[0.4rem] py-[0.5rem] rounded-xl cursor-pointer hover:border-txt-black"
-          >
+          <button className="flex w-full justify-center items-center mt-[1.5rem] font-Regular text-txt-gray-black border-border border-[1px] px-[0.4rem] py-[0.5rem] rounded-xl cursor-pointer hover:border-txt-black">
             <img
               src={googleImg}
               alt="google-logo"
@@ -77,29 +73,31 @@ const Login = () => {
             </span>
           </div>
           <form
-            // onSubmit={handleLogIn}
+            onSubmit={handleLoginForm}
             className="w-full flex flex-col justify-center items-center"
           >
             <div className="flex flex-col items-start w-full font-Regular mt-[1rem]">
               <span className="text-[1.1rem]">Email address</span>
               <input
                 type="email"
+                required
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Enter your email address"
                 className="border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
             <div className="flex flex-col items-start w-full font-Regular mt-[1rem]">
               <span className="text-[1.1rem]">Password</span>
               <input
                 type="password"
+                required
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Enter your password"
                 className="border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
               />
             </div>
             <div className="flex flex-col w-full mt-[0.5rem]">
@@ -110,11 +108,8 @@ const Login = () => {
               </Link>
             </div>
             <button
-              className={`font-Regular mt-[1rem] bg-border text-nav-white w-full py-[0.5rem] text-center rounded-lg cursor-not-allowed transition ${
-                !logInEnabled
-                  ? "cursor-not-allowed"
-                  : "cursor-pointer bg-btn-blue"
-              }`}
+              type="submit"
+              className={`font-Regular mt-[1rem] bg-btn-blue text-nav-white w-full py-[0.5rem] text-center rounded-lg cursor-pointer transition`}
               disabled={loading}
             >
               Continue

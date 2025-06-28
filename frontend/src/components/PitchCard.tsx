@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
@@ -13,7 +13,6 @@ const PitchCard = () => {
   const [pitch, setPitches] = useState();
   const navigate = useNavigate();
   const { role } = useParams();
-
 
   // const handleClick = (value, e) => {
   //   if (locked) return;

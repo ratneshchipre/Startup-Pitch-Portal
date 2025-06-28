@@ -1,3 +1,4 @@
+import { type RefObject } from "react";
 import { motion } from "framer-motion";
 import { fadeInUp, fadeIn, btnFadeInUp } from "../utils/motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -5,7 +6,11 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import uploadPitchImg from "../assets/uploadPitchImg.png";
 import gridTunnelImg from "../assets/gridTunnelImg.jpg";
 
-const HeroSec = ({ sectionRef }) => {
+type HeroSecProps = {
+  sectionRef: RefObject<HTMLDivElement>;
+};
+
+const HeroSec = ({ sectionRef }: HeroSecProps) => {
   const scrollToSection = () => {
     if (sectionRef.current) {
       const yOffset = -80;

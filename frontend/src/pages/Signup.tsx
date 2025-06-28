@@ -6,7 +6,7 @@ import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-type SignupFormDataType = {
+type SignupFormData = {
   firstName: string;
   lastName: string;
   email: string;
@@ -16,7 +16,7 @@ type SignupFormDataType = {
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<SignupFormDataType>({
+  const [formData, setFormData] = useState<SignupFormData>({
     firstName: "",
     lastName: "",
     email: "",
@@ -44,7 +44,11 @@ const Signup = () => {
       });
       console.log(response);
       if (response.data.success === true) {
-        navigate(`/account/${response.data.user.role.toLowerCase()}/profile`);
+        navigate(
+          `/account/${response.data.user.role.toLowerCase()}/${
+            response.data.user.id
+          }/profile`
+        );
       }
     } catch (error) {}
   };

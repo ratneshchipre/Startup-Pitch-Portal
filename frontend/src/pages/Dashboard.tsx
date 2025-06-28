@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuUpload } from "react-icons/lu";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,12 +11,20 @@ import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import avatarImg from "../assets/avatarImg.png";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { fetchUserData } from "../redux/slices/userData";
 
 const Dashboard = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  let navigate = useNavigate();
-  const { role } = useParams();
+  const userDataState = useAppSelector((state) => state.userData);
+  const dispatch = useAppDispatch();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { role, userId } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchUserData({ role, userId }));
+    console.log(userDataState.data);
+  }, []);
 
   return (
     <div className="flex flex-col mini-desktop:flex-row w-full items-center">
@@ -29,7 +37,7 @@ const Dashboard = () => {
           />
         </div>
         <h1 className="font-Medium text-[1.3rem] text-txt-black select-none">
-          Welcome, {}!
+          Welcome, {userDataState.data?.firstName}!
         </h1>
       </div>
       <div
@@ -47,10 +55,10 @@ const Dashboard = () => {
           </div>
           <div className="flex flex-col w-auto justify-center items-center mt-[1rem]">
             <h2 className="font-Medium text-txt-black text-center text-[1.1rem] line-clamp-1 overflow-hidden [-webkit-box-orient:vertical] [display:-webkit-box]">
-              {}
+              {`${userDataState.data?.firstName} ${userDataState.data?.lastName}`}
             </h2>
             <p className="font-Regular text-txt-gray-black text-center wrap-break-word line-clamp-1 overflow-hidden [-webkit-box-orient:vertical] [display:-webkit-box]">
-              {}
+              {userDataState.data?.email}
             </p>
           </div>
         </div>
@@ -61,8 +69,8 @@ const Dashboard = () => {
                 <Link
                   to={`${
                     role === "founder"
-                      ? "/account/founder/profile"
-                      : "/account/investor/profile"
+                      ? `/account/founder/${userId}/profile`
+                      : `/account/investor/${userId}/profile`
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -76,8 +84,8 @@ const Dashboard = () => {
                 <Link
                   to={`${
                     role === "founder"
-                      ? "/account/founder/create-pitch"
-                      : "/account/investor/find-pitches"
+                      ? `/account/founder/${userId}/create-pitch`
+                      : `/account/investor/${userId}/find-pitches`
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -93,8 +101,8 @@ const Dashboard = () => {
                 <Link
                   to={`${
                     role === "founder"
-                      ? "/account/founder/my-pitches"
-                      : "/account/investor/saved-pitches"
+                      ? `/account/founder/${userId}/my-pitches`
+                      : `/account/investor/${userId}/saved-pitches`
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -113,8 +121,8 @@ const Dashboard = () => {
                 <Link
                   to={`${
                     role === "founder"
-                      ? "/account/founder/analytics"
-                      : "/account/investor/my-investments"
+                      ? `/account/founder/${userId}/analytics`
+                      : `/account/investor/${userId}/my-investments`
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -129,7 +137,7 @@ const Dashboard = () => {
               {role === "founder" && (
                 <li>
                   <Link
-                    to="/account/founder/feedback"
+                    to={`/account/founder/${userId}/feedback`}
                     onClick={() => setIsOpen(false)}
                   >
                     <button className="flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue">
@@ -146,7 +154,7 @@ const Dashboard = () => {
               role === "founder" ? "mt-[3.5rem]" : "mt-[7rem]"
             }  text-features gap-[0.4rem]`}
           >
-            <Link to="/account/:role/ResetPassword">
+            <Link to={`/account/${role}/${userId}/reset-password`}>
               <button className="flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue">
                 <FontAwesomeIcon icon={faGear} className="" />
                 <span className="text-[1.1rem]">Settings</span>

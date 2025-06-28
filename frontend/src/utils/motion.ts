@@ -1,4 +1,6 @@
-export const fadeInUp = {
+import { type Variants } from "framer-motion";
+
+export const fadeInUp: Variants = {
   hidden: {
     opacity: 0,
     y: 40,
@@ -14,7 +16,7 @@ export const fadeInUp = {
   }),
 };
 
-export const fadeIn = (direction: string, delay: number) => {
+export const fadeIn = (direction: string, delay: number): Variants => {
   return {
     hidden: {
       y: direction === "up" ? 40 : direction === "down" ? -40 : 0,
@@ -35,7 +37,7 @@ export const fadeIn = (direction: string, delay: number) => {
   };
 };
 
-export const btnFadeInUp = {
+export const btnFadeInUp: Variants = {
   hidden: {
     opacity: 0,
     y: 20,

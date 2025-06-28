@@ -47,10 +47,16 @@ const handleUserSignUp = async (req, res) => {
 
     const token = setUserToken(user);
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    });
+
     return res.status(201).json({
       success: true,
       message: "Signup successful",
-      token,
       user: {
         id: user._id,
         firstName: user.firstName,
@@ -97,10 +103,16 @@ const handleUserLogIn = async (req, res) => {
 
     const token = setUserToken(user);
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    });
+
     return res.status(201).json({
       success: true,
       message: "Login successful",
-      token,
       user: {
         id: user._id,
         firstName: user.firstName,

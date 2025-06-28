@@ -45,26 +45,41 @@ const App = () => {
 
         {/* Dashboard Pages Layout */}
         <Route element={<DashboardLayout />}>
-          <Route path="/account/:role/profile" element={<Profile />} />
-          <Route path="/account/:role/create-pitch" element={<UploadPitch />} />
-          <Route path="/account/:role/my-pitches" element={<MyPitches />} />
-          <Route path="/account/:role/analytics" element={<Analytics />} />
-          <Route path="/account/:role/feedback" element={<Feedback />} />
-          <Route path="/account/:role/find-pitches" element={<FindPitches />} />
+          <Route path="/account/:role/:userId/profile" element={<Profile />} />
           <Route
-            path="/account/:role/pitch/id/:pitchID"
+            path="/account/:role/:userId/create-pitch"
+            element={<UploadPitch />}
+          />
+          <Route
+            path="/account/:role/:userId/my-pitches"
+            element={<MyPitches />}
+          />
+          <Route
+            path="/account/:role/:userId/analytics"
+            element={<Analytics />}
+          />
+          <Route
+            path="/account/:role/:userId/feedback"
+            element={<Feedback />}
+          />
+          <Route
+            path="/account/:role/:userId/find-pitches"
+            element={<FindPitches />}
+          />
+          <Route
+            path="/account/:role/:userId/pitch/id/:pitchID"
             element={<PitchDetails />}
           />
           <Route
-            path="/account/:role/saved-pitches"
+            path="/account/:role/:userId/saved-pitches"
             element={<SavedPitches />}
           />
           <Route
-            path="/account/:role/my-investments"
+            path="/account/:role/:userId/my-investments"
             element={<MyInvestments />}
           />
           <Route
-            path="/account/:role/ResetPassword"
+            path="/account/:role/:userId/reset-password"
             element={<ResetPassword />}
           />
         </Route>

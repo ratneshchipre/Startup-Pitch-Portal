@@ -9,6 +9,7 @@ dotenv.config();
 
 // Routes
 import userAuthRouter from "./routes/userAuthRoute.js";
+import userAccountRouter from "./routes/userAccountRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 4001;
@@ -32,6 +33,7 @@ app.use(
 
 // Routes
 app.use("/api/user", userAuthRouter);
+app.use("/api/account", userAccountRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running successfully on PORT ${PORT}`);
