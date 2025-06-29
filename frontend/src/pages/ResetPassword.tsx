@@ -1,10 +1,9 @@
-import React from "react";
 import headLogo from "../assets/headLogo(black).png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
 const ResetPassword = () => {
-  const handleResetSubmit = (e) => {
+  const handleResetSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 

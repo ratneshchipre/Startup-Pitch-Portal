@@ -1,53 +1,79 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { categories } from "../categoryList";
+import axios from "axios";
+
+type UploadPitchFormData = {
+  title: string;
+  details: string;
+  file: File | null;
+  category: string;
+  goal: number;
+  tags: string;
+};
 
 const UploadPitch = () => {
-  const [pitchTitle, setpitchTitle] = useState("");
-  const [pitchDetails, setpitchDetails] = useState("");
-  const [category, setcategory] = useState("");
-  const [fundinggoles, setfundinggoles] = useState("");
-  const [usetags, setusetags] = useState("");
-  const [userRes, setuserRes] = useState("");
-
-  // const handlePitchSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   await firebase.handleCreateNewPitch(
-  //     pitchTitle,
-  //     pitchDetails,
-  //     category,
-  //     fundinggoles,
-  //     usetags,
-  //     userRes
-  //   );
-  // };
-
-  //cludenary api
   const [loading, setLoading] = useState(false);
-  // const handleFileUpload = async (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   const file = event.target.files[0];
+  const [formData, setFormData] = useState<UploadPitchFormData>({
+    title: "",
+    details: "",
+    file: null,
+    category: "",
+    goal: 0,
+    tags: "",
+  });
 
-  //   if (!file) return;
-  //   setLoading(true);
-  //   const data = new FormData();
-  //   data.append("file", file);
-  //   data.append("upload_preset", "om-prbal");
-  //   data.append("cloud_name", "dadlmfhco");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  //   const res = await fetch(
-  //     "https://api.cloudinary.com/v1_1/dadlmfhco/image/upload",
-  //     {
-  //       method: "POST",
-  //       body: data,
-  //     }
-  //   );
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  //   const uploadedImageURL = await res.json();
-  //   setuserRes(uploadedImageURL.url);
-  //   console.log(uploadedImageURL.url);
-  //   setLoading(false);
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // const handleFileChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
   // };
+
+  const handlePitchFileUpload = async () => {
+    try {
+      const response = await axios.post("/api/pitch/upload-pitch-file", {
+        file: formData.file,
+      });
+      console.log(response);
+    } catch (error) {}
+  };
+
+  const handleUploadPitchForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("/api/pitch/create-pitch", {
+        title: formData.title,
+        details: formData.details,
+        category: formData.category,
+        goal: formData.goal,
+        tags: formData.tags,
+      });
+      console.log(response);
+      handlePitchFileUpload();
+    } catch (error) {}
+  };
 
   return (
     <div className="w-full flex flex-col px-[2rem] py-[1rem] h-[20rem]">
@@ -56,7 +82,7 @@ const UploadPitch = () => {
           Create a new Pitch Deck
         </h1>
         <form
-          // onSubmit={handlePitchSubmit}
+          onSubmit={handleUploadPitchForm}
           className="mt-[1.4rem] flex flex-col bg-cream-white border-dash-border border-[2px] px-[1.5rem] py-[1.5rem] rounded-lg gap-[1.5rem]"
         >
           <div className="flex flex-col gap-[0.5rem]">
@@ -64,9 +90,10 @@ const UploadPitch = () => {
               Pitch Title
             </label>
             <input
-              onChange={(e) => setpitchTitle(e.target.value)}
-              value={pitchTitle}
               type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
               placeholder="Enter a pitch title"
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />
@@ -76,9 +103,9 @@ const UploadPitch = () => {
               Pitch Details
             </label>
             <textarea
-              onChange={(e) => setpitchDetails(e.target.value)}
-              value={pitchDetails}
-              // type=""
+              name="details"
+              value={formData.details}
+              onChange={handleTextAreaChange}
               placeholder="Describe your pitch..."
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.6rem] h-[10rem] border-border border-[2px] resize-none"
             />
@@ -88,11 +115,12 @@ const UploadPitch = () => {
               Upload File
             </label>
             {loading ? (
-              "Uploading"
+              "Uploading..."
             ) : (
               <input
-                // onChange={handleFileUpload}
+                name="file"
                 type="file"
+                onChange={handlePitchFileUpload}
                 className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px] cursor-pointer"
               />
             )}
@@ -102,15 +130,16 @@ const UploadPitch = () => {
               Pitch Category
             </label>
             <select
-              onChange={(e) => setcategory(e.target.value)}
-              value={category}
+              name="category"
+              value={formData.category}
+              onChange={handleSelectChange}
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             >
-              {/* {categories.map((category, index) => (
+              {categories.map((category, index) => (
                 <option key={index} value={category}>
                   {category}
                 </option>
-              ))} */}
+              ))}
             </select>
           </div>
           <div className="flex flex-col gap-[0.5rem]">
@@ -118,10 +147,11 @@ const UploadPitch = () => {
               Funding Goal ($)
             </label>
             <input
-              onChange={(e) => setfundinggoles(e.target.value)}
-              value={fundinggoles}
               type="number"
               min="0"
+              name="goal"
+              value={formData.goal}
+              onChange={handleChange}
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />
           </div>
@@ -130,9 +160,10 @@ const UploadPitch = () => {
               Tags (comma-separated)
             </label>
             <input
-              onChange={(e) => setusetags(e.target.value)}
-              value={usetags}
               type="text"
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
               placeholder="e.g. AI, Startup, Tech"
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />

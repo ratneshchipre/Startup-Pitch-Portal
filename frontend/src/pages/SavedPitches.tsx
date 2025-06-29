@@ -1,4 +1,3 @@
-import React from "react";
 import PitchCard from "../components/PitchCard";
 
 const SavedPitches = () => {

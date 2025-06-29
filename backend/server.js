@@ -10,6 +10,7 @@ dotenv.config();
 // Routes
 import userAuthRouter from "./routes/userAuthRoute.js";
 import userAccountRouter from "./routes/userAccountRoute.js";
+import pitchRouter from "./routes/pitchRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 4001;
@@ -34,6 +35,7 @@ app.use(
 // Routes
 app.use("/api/user", userAuthRouter);
 app.use("/api/account", userAccountRouter);
+app.use("/api/pitch", pitchRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running successfully on PORT ${PORT}`);
