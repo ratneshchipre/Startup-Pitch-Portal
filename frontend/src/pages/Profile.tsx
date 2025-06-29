@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { countries } from "../countryList";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { fetchUserData } from "../redux/slices/userData";
+import axios from "axios";
 
 type ProfileFormData = {
   firstName: string;
@@ -12,6 +16,9 @@ type ProfileFormData = {
 };
 
 const Profile = () => {
+  const userDataState = useAppSelector((state) => state.userData);
+  const dispatch = useAppDispatch();
+  const { role, userId } = useParams();
   const [formData, setFormData] = useState<ProfileFormData>({
     firstName: "",
     lastName: "",
@@ -21,6 +28,24 @@ const Profile = () => {
     city: "",
     phone: "",
   });
+
+  useEffect(() => {
+    dispatch(fetchUserData({ role, userId }));
+  }, [dispatch, role, userId]);
+
+  useEffect(() => {
+    if (userDataState.data) {
+      setFormData({
+        firstName: userDataState.data.firstName,
+        lastName: userDataState.data.lastName,
+        email: userDataState.data.email,
+        address: userDataState.data.address || "",
+        country: userDataState.data.country || "",
+        city: userDataState.data.city || "",
+        phone: userDataState.data.phone || "",
+      });
+    }
+  }, [userDataState.data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -38,6 +63,27 @@ const Profile = () => {
 
   const handleUserProfileForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.patch(
+        `/api/account/${role}/${userId}/update-data`,
+        {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          address: formData.address,
+          country: formData.country,
+          city: formData.city,
+          phone: formData.phone,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   return (
@@ -56,6 +102,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
+              name="firstName"
               value={formData.firstName}
               onChange={handleChange}
               placeholder="Enter your first name"
@@ -68,6 +115,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
+              name="lastName"
               value={formData.lastName}
               onChange={handleChange}
               placeholder="Enter your last name"
@@ -80,6 +128,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
+              name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
@@ -92,6 +141,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
+              name="address"
               value={formData.address}
               onChange={handleChange}
               placeholder="Enter your address"
@@ -103,6 +153,7 @@ const Profile = () => {
               Country
             </label>
             <select
+              name="country"
               value={formData.country}
               onChange={handleSelectChange}
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
@@ -120,6 +171,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
+              name="city"
               value={formData.city}
               onChange={handleChange}
               placeholder="Enter your city"
@@ -132,13 +184,17 @@ const Profile = () => {
             </label>
             <input
               type="text"
+              name="phone"
               value={formData.phone}
               onChange={handleChange}
               placeholder="Enter your phone number"
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
             />
           </div>
-          <button className="font-Regular text-nav-white bg-btn-blue py-[0.4rem] text-[1.1rem] rounded-lg cursor-pointer hover:bg-hover-blue transition-all">
+          <button
+            type="submit"
+            className="font-Regular text-nav-white bg-btn-blue py-[0.4rem] text-[1.1rem] rounded-lg cursor-pointer hover:bg-hover-blue transition-all"
+          >
             Save Changes
           </button>
         </form>

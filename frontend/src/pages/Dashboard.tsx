@@ -24,7 +24,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(fetchUserData({ role, userId }));
     console.log(userDataState.data);
-  }, []);
+  }, [dispatch, role, userId]);
 
   return (
     <div className="flex flex-col mini-desktop:flex-row w-full items-center">

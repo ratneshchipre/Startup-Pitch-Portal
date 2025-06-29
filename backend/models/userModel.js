@@ -29,6 +29,22 @@ const userSchema = new mongoose.Schema(
       trim: true,
       enum: ["Founder", "Investor"],
     },
+    address: {
+      type: String,
+      trim: true,
+    },
+    country: {
+      type: String,
+      trim: true,
+    },
+    city: {
+      type: String,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
     // isVerified: {
     //   type: Boolean,
     //   default: false,

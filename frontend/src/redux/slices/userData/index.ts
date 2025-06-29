@@ -1,12 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface UserDataTypes {
+interface UserData {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
   role: string;
+  address: string;
+  country: string;
+  city: string;
+  phone: string;
 }
 
 export const fetchUserData = createAsyncThunk(
@@ -30,7 +34,7 @@ export const userDataSlice = createSlice({
   name: "userData",
   initialState: {
     isLoading: false,
-    data: null as UserDataTypes | null,
+    data: null as UserData | null,
     isError: false,
   },
   reducers: {},
