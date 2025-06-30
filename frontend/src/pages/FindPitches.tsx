@@ -5,8 +5,8 @@ import PitchCard from "../components/PitchCard";
 import { useParams } from "react-router-dom";
 
 const FindPitches = () => {
-  // const params = useParams();
-  // const [pitch, setpitch] = useState([]);
+  // const {} = useParams();
+  const [pitches, setPitches] = useState([]);
   // const [userEmail, setUserEmail] = useState(null);
   // const [userName, setUserName] = useState(null);
 
@@ -27,11 +27,11 @@ const FindPitches = () => {
         />
       </div>
       <div className="flex flex-col w-full pb-[1.5rem]">
-        {/* {pitch.map((pitch) => (
+        {/* {pitches.map((pitch) => (
           <PitchCard
-            link={pitch.data().link}
-            key={pitch.id}
             id={pitch.id}
+            key={pitch.id}
+            link={pitch.data().link}
             {...pitch.data()}
           />
         ))} */}

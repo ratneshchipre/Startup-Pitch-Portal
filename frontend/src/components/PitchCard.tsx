@@ -6,80 +6,93 @@ import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const PitchCard = () => {
-  const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(null);
-  const [locked, setLocked] = useState(false);
-  const [pitch, setPitches] = useState();
+type PitchRatingTypes = {
+  rating: number;
+  hover: number | null;
+  locked: boolean;
+};
+
+interface PitchProps {
+  title: string;
+  details: string;
+  goal: number;
+}
+
+const PitchCard = (props: PitchProps) => {
+  const { role, userId, pitchId } = useParams();
   const navigate = useNavigate();
-  const { role } = useParams();
+  const [pitches, setPitches] = useState();
+  const [pitchRating, setPitchRating] = useState<PitchRatingTypes>({
+    rating: 0,
+    hover: null,
+    locked: false,
+  });
 
-  // const handleClick = (value, e) => {
-  //   if (locked) return;
+  const handleClick = (value: number, e: React.MouseEvent) => {
+    if (pitchRating.locked) return;
 
-  //   const rect = e.currentTarget.getBoundingClientRect();
-  //   const isHalf = e.clientX - rect.left < rect.width / 2;
-  //   const selected = isHalf ? value - 0.5 : value;
-  //   setRating(selected);
-  //   setLocked(true);
-  // };
+    const rect = e.currentTarget.getBoundingClientRect();
+    const isHalf = e.clientX - rect.left < rect.width / 2;
+    const selected = isHalf ? value - 0.5 : value;
+    setPitchRating({ ...pitchRating, rating: selected });
+    setPitchRating({ ...pitchRating, locked: true });
+  };
 
-  // const handleMouseMove = (value: number, e: React) => {
-  //   if (locked) return;
+  const handleMouseMove = (value: number, e: React.MouseEvent) => {
+    if (pitchRating.locked) return;
 
-  //   const rect = e.currentTarget.getBoundingClientRect();
-  //   const isHalf = e.clientX - rect.left < rect.width / 2;
-  //   const hovered = isHalf ? value - 0.5 : value;
-  //   setHover(hovered);
-  // };
+    const rect = e.currentTarget.getBoundingClientRect();
+    const isHalf = e.clientX - rect.left < rect.width / 2;
+    const hovered = isHalf ? value - 0.5 : value;
+    setPitchRating({ ...pitchRating, hover: hovered });
+  };
 
   const handleMouseLeave = () => {
-    if (locked) return;
-    setHover(null);
+    if (pitchRating.locked) return;
+    setPitchRating({ ...pitchRating, hover: null });
   };
 
   const getStarClass = (value: number) => {
-    const activeValue = hover !== null ? hover : rating;
+    const activeValue =
+      pitchRating.hover !== null ? pitchRating.hover : pitchRating.rating;
     if (value <= activeValue) return "text-btn-blue";
     if (value - 0.5 === activeValue) return "text-btn-blue";
     return "text-gray-300";
   };
 
-  // const tags = Array.isArray(props.tags)
-  //   ? props.tags
-  //   : props.tags?.split(",").map((tag) => tag.trim());
-
   return (
     <div className="flex flex-col w-full">
       <div className="w-full mini-desktop:w-auto px-[1.5rem] mini-desktop:ml-[20rem]">
-        <Link to={`/account/${role}/pitch/id/`}>
+        <Link to={`/account/${role}/${userId}/pitches/${pitchId}`}>
           <div className="hover:bg-dash-border px-[1.2rem] py-[1.4rem] cursor-pointer rounded-md">
             <FontAwesomeIcon
               icon={faHeartRegular}
               className="absolute right-[3.5rem] text-[1.3rem] text-txt-black"
             />
             <h2 className="font-Regular text-btn-blue text-[1.2rem] line-clamp-2 overflow-hidden [-webkit-box-orient:vertical] [display:-webkit-box]">
-              {/* {props.pitch} */}
+              {props.title ? props.title : "Title"}
             </h2>
             <p className="font-Light text-txt-gray-black text-[1.05rem] line-clamp-3 overflow-hidden [-webkit-box-orient:vertical] [display:-webkit-box] mt-[0.8rem] mb-[2rem]">
-              {/* {props.pitchDetails} */}
+              {props.details ? props.details : "Details"}
             </p>
             <div className="flex justify-between gap-[1rem] items-center">
               <span className="font-Regular text-txt-gray-black">
                 Proposed Funding($):{" "}
-                {/* <span className="text-txt-black">{props.funding_goal}</span> */}
+                <span className="text-txt-black">
+                  {props.goal ? props.goal : "Goal"}
+                </span>
               </span>
               <div className="flex gap-[0.3rem]">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <FontAwesomeIcon
                     icon={faStar}
                     key={value}
+                    onClick={(e) => handleClick(value, e)}
+                    onMouseMove={(e) => handleMouseMove(value, e)}
+                    onMouseLeave={handleMouseLeave}
                     className={`cursor-pointer transition-all ${getStarClass(
                       value
                     )}`}
-                    // onClick={(e) => handleClick(value, e)}
-                    // onMouseMove={(e) => handleMouseMove(value, e)}
-                    onMouseLeave={handleMouseLeave}
                   />
                 ))}
               </div>

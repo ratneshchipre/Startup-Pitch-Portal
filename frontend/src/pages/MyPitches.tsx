@@ -1,7 +1,12 @@
 import { useState } from "react";
 import PitchCard from "../components/PitchCard";
+import { useParams } from "react-router-dom";
 
 const MyPitches = () => {
+  // const { role, userId, pitchId } = useParams();
+  const [pitches, setPitches] = useState<number>(0);
+
+  setPitches(2);
 
   return (
     <div className="flex flex-col w-full">
@@ -14,7 +19,7 @@ const MyPitches = () => {
             <PitchCard
               key={pitch.id}
               id={pitch.id}
-              link={`/account/founder/pitch-id-${pitch.id}`}
+              link={`/account/${role}/${userId}/pitches/${pitchId}`}
               {...pitch.data()}
             />
           ))

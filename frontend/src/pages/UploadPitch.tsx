@@ -12,7 +12,7 @@ type UploadPitchFormData = {
 };
 
 const UploadPitch = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<UploadPitchFormData>({
     title: "",
     details: "",
@@ -43,25 +43,41 @@ const UploadPitch = () => {
     });
   };
 
-  // const handleFileChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //   setFormData({
-  //     ...formData,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
-
-  const handlePitchFileUpload = async () => {
-    try {
-      const response = await axios.post("/api/pitch/upload-pitch-file", {
-        file: formData.file,
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFormData({
+        ...formData,
+        file: e.target.files[0],
       });
-      console.log(response);
-    } catch (error) {}
+    }
+  };
+
+  const uploadFileToBackend = async (file: File) => {
+    setLoading(true);
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("file", file);
+      const response = await axios.post(
+        "/api/pitch/upload-pitch-file",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("File upload successful:", response.data);
+    } catch (error) {
+      console.error("File upload failed:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUploadPitchForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setLoading(true);
     try {
       const response = await axios.post("/api/pitch/create-pitch", {
         title: formData.title,
@@ -70,9 +86,17 @@ const UploadPitch = () => {
         goal: formData.goal,
         tags: formData.tags,
       });
-      console.log(response);
-      handlePitchFileUpload();
-    } catch (error) {}
+
+      console.log("Pitch creation successful:", response.data);
+
+      if (formData.file) {
+        await uploadFileToBackend(formData.file);
+      }
+    } catch (error) {
+      console.error("Pitch creation failed:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -118,9 +142,9 @@ const UploadPitch = () => {
               "Uploading..."
             ) : (
               <input
-                name="file"
                 type="file"
-                onChange={handlePitchFileUpload}
+                name="file"
+                onChange={handleFileChange}
                 className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px] cursor-pointer"
               />
             )}
