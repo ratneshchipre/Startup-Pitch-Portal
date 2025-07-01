@@ -17,17 +17,10 @@ const pitchSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    file: [
-      {
-        url: String,
-        publicId: String,
-        uploadedAt: Date,
-        type: {
-          type: String,
-          enum: ["image", "video", "pdf"],
-        },
-      },
-    ],
+    file: {
+      type: Object,
+      required: true,
+    },
     category: {
       type: String,
       required: true,

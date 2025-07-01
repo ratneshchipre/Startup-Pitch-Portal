@@ -52,48 +52,33 @@ const UploadPitch = () => {
     }
   };
 
-  const uploadFileToBackend = async (file: File) => {
-    setLoading(true);
-    try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("file", file);
-      const response = await axios.post(
-        "/api/pitch/upload-pitch-file",
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("File upload successful:", response.data);
-    } catch (error) {
-      console.error("File upload failed:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleUploadPitchForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setLoading(true);
     try {
-      const response = await axios.post("/api/pitch/create-pitch", {
-        title: formData.title,
-        details: formData.details,
-        category: formData.category,
-        goal: formData.goal,
-        tags: formData.tags,
-      });
+      const formDataToSend = new FormData();
 
-      console.log("Pitch creation successful:", response.data);
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("details", formData.details);
+      formDataToSend.append("category", formData.category);
+      formDataToSend.append("goal", formData.goal.toString());
+      formDataToSend.append("tags", formData.tags);
 
       if (formData.file) {
-        await uploadFileToBackend(formData.file);
+        formDataToSend.append("file", formData.file);
+      } else {
+        setLoading(false);
+        // setError("Pitch file is required.");
+        return;
       }
+      const response = await axios.post(
+        "/api/pitch/create-pitch",
+        formDataToSend
+      );
+      console.log("Pitch created successfully:", response);
     } catch (error) {
-      console.error("Pitch creation failed:", error);
+      console.error("Operation failed:", error);
     } finally {
       setLoading(false);
     }
