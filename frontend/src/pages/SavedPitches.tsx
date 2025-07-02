@@ -9,9 +9,9 @@ const SavedPitches = () => {
         </h1>
       </div>
       <div className="flex flex-col w-full pb-[1.5rem]">
+        {/* <PitchCard />
         <PitchCard />
-        <PitchCard />
-        <PitchCard />
+        <PitchCard /> */}
       </div>
     </div>
   );

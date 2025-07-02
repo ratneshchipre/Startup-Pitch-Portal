@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { countries } from "../countryList";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { fetchUserData } from "../redux/slices/userData";
+import { fetchUserData } from "../redux/slices/userDataSlice";
 import axios from "axios";
 
 type ProfileFormData = {

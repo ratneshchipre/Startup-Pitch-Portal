@@ -22,7 +22,7 @@ export const Home = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <HeroSec sectionRef={sectionRef} />
+      <HeroSec sectionRef={sectionRef as unknown as React.RefObject<HTMLDivElement>} />
       <div className="bg-cream-white w-full flex flex-col items-center py-[3rem] px-[3rem] lg:px-[4rem] xl:px-[8rem]">
         <h2 className="font-Bold text-txt-black text-[2rem] lg:text-[2.3rem]">
           How it works

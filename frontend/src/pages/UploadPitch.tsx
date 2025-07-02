@@ -74,7 +74,14 @@ const UploadPitch = () => {
       }
       const response = await axios.post(
         "/api/pitch/create-pitch",
-        formDataToSend
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            // You'll also need to add your Authorization header here, e.g.:
+            // 'Authorization': `Bearer ${YOUR_AUTH_TOKEN}`
+          },
+        }
       );
       console.log("Pitch created successfully:", response);
     } catch (error) {
@@ -100,6 +107,7 @@ const UploadPitch = () => {
             </label>
             <input
               type="text"
+              required
               name="title"
               value={formData.title}
               onChange={handleChange}
@@ -113,6 +121,7 @@ const UploadPitch = () => {
             </label>
             <textarea
               name="details"
+              required
               value={formData.details}
               onChange={handleTextAreaChange}
               placeholder="Describe your pitch..."
@@ -128,6 +137,7 @@ const UploadPitch = () => {
             ) : (
               <input
                 type="file"
+                required
                 name="file"
                 onChange={handleFileChange}
                 className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px] cursor-pointer"
@@ -140,6 +150,7 @@ const UploadPitch = () => {
             </label>
             <select
               name="category"
+              required
               value={formData.category}
               onChange={handleSelectChange}
               className="w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]"
@@ -157,6 +168,7 @@ const UploadPitch = () => {
             </label>
             <input
               type="number"
+              required
               min="0"
               name="goal"
               value={formData.goal}
@@ -170,6 +182,7 @@ const UploadPitch = () => {
             </label>
             <input
               type="text"
+              required
               name="tags"
               value={formData.tags}
               onChange={handleChange}

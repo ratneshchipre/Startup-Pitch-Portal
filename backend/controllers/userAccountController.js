@@ -19,7 +19,7 @@ const getUserData = async (req, res) => {
       });
     }
 
-    if (user.role.toLowerCase() !== role) {
+    if (user.role !== role) {
       return res.status(400).json({
         success: false,
         message: "User role does not match",
@@ -71,7 +71,7 @@ const updateUserData = async (req, res) => {
       });
     }
 
-    if (user.role.toLowerCase() !== role) {
+    if (user.role !== role) {
       return res.status(400).json({
         success: false,
         message: "User role does not match",

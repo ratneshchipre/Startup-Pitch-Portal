@@ -1,5 +1,5 @@
-import Pitch from "../models/pitchModel.js";
-import uploadToCloudinary from "../services/cloudinaryService.js";
+import Pitch from "../../models/pitchModel.js";
+import uploadToCloudinary from "../../services/cloudinaryService.js";
 
 const handleCreatePitch = async (req, res) => {
   try {
@@ -72,4 +72,38 @@ const handleCreatePitch = async (req, res) => {
   }
 };
 
-export { handleCreatePitch };
+const getAllPitchesForFounder = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized. Please login to continue",
+      });
+    }
+
+    const pitches = await Pitch.find({ userId });
+
+    if (!pitches) {
+      return res.status(404).json({
+        success: false,
+        message: "No pitches found for this user",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Pitches fetched successfully",
+      pitches,
+    });
+  } catch (error) {
+    console.error("Error occurred while fetching all pitches:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch all pitches. Please try again later",
+    });
+  }
+};
+
+export { handleCreatePitch, getAllPitchesForFounder };

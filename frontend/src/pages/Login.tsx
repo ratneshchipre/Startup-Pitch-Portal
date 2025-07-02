@@ -37,7 +37,7 @@ const Login = () => {
       console.log(response);
       if (response.data.success === true) {
         navigate(
-          `/account/${response.data.user.role.toLowerCase()}/${
+          `/account/${response.data.user.role}/${
             response.data.user.id
           }/profile`
         );

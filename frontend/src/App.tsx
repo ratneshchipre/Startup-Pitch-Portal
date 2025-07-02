@@ -51,8 +51,12 @@ const App = () => {
             element={<UploadPitch />}
           />
           <Route
-            path="/account/:role/:userId/my-pitches/:pitchId"
+            path="/account/:role/:userId/my-pitches"
             element={<MyPitches />}
+          />
+          <Route
+            path="/account/:role/:userId/my-pitches/:pitchId"
+            element={<PitchDetails />}
           />
           <Route
             path="/account/:role/:userId/analytics"
@@ -67,7 +71,7 @@ const App = () => {
             element={<FindPitches />}
           />
           <Route
-            path="/account/:role/:userId/pitches/:pitchId"
+            path="/account/:role/:userId/find-pitches/:pitchId"
             element={<PitchDetails />}
           />
           <Route

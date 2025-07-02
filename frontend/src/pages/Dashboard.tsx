@@ -13,7 +13,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import avatarImg from "../assets/avatarImg.png";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { fetchUserData } from "../redux/slices/userData";
+import { fetchUserData } from "../redux/slices/userDataSlice";
 
 const Dashboard = () => {
   const userDataState = useAppSelector((state) => state.userData);

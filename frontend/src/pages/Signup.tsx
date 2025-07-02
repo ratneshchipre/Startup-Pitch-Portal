@@ -40,14 +40,12 @@ const Signup = () => {
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
-        role: formData.role.split(" ").pop(),
+        role: formData.role.toLowerCase().split(" ").pop(),
       });
       console.log(response);
       if (response.data.success === true) {
         navigate(
-          `/account/${response.data.user.role.toLowerCase()}/${
-            response.data.user.id
-          }/profile`
+          `/account/${response.data.user.role}/${response.data.user.id}/profile`
         );
       }
     } catch (error) {}

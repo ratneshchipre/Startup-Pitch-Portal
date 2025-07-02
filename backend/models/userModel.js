@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      enum: ["Founder", "Investor"],
+      enum: ["founder", "investor"],
     },
     address: {
       type: String,
