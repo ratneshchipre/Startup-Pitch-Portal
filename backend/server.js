@@ -11,6 +11,7 @@ dotenv.config();
 import userAuthRouter from "./routes/userAuthRoute.js";
 import userAccountRouter from "./routes/userAccountRoute.js";
 import founderPitchRouter from "./routes/founderRoutes/founderPitchRoute.js";
+import investorPitchRouter from "./routes/investorRoutes/investorPitchRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 4001;
@@ -38,7 +39,7 @@ app.use("/api/account", userAccountRouter);
 // Founder routes
 app.use("/api/pitch", founderPitchRouter);
 // Investor routes
-// app.use("/api/pitches", )
+app.use("/api/pitches", investorPitchRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running successfully on PORT ${PORT}`);

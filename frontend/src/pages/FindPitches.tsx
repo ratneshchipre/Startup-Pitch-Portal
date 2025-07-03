@@ -3,12 +3,36 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import PitchCard from "../components/PitchCard";
 import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { fetchPitchesForInvestor } from "../redux/slices/investorPitchSlice";
+
+interface founderPitches {
+  _id: string;
+  userId: string;
+  title: string;
+  file: object;
+  category: string;
+  goal: number;
+  tags: string;
+}
 
 const FindPitches = () => {
-  // const {} = useParams();
-  const [pitches, setPitches] = useState([]);
-  // const [userEmail, setUserEmail] = useState(null);
-  // const [userName, setUserName] = useState(null);
+  const investorPitchesState = useAppSelector((state) => state.investorPitches);
+  const dispatch = useAppDispatch();
+  const [pitches, setPitches] = useState<founderPitches[] | null>(null);
+  const { role, userId } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchPitchesForInvestor());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (Array.isArray(investorPitchesState.data)) {
+      setPitches(investorPitchesState.data as founderPitches[]);
+    } else {
+      setPitches(null);
+    }
+  }, [investorPitchesState.data]);
 
   return (
     <div className="flex flex-col w-full">
@@ -27,14 +51,14 @@ const FindPitches = () => {
         />
       </div>
       <div className="flex flex-col w-full pb-[1.5rem]">
-        {/* {pitches.map((pitch) => (
+        {pitches?.map((pitch) => (
           <PitchCard
-            id={pitch.id}
-            key={pitch.id}
-            link={pitch.data().link}
-            {...pitch.data()}
+            id={pitch._id}
+            key={pitch._id}
+            link={`/account/${role}/${userId}/find-pitches/${pitch._id}`}
+            {...pitch}
           />
-        ))} */}
+        ))}
       </div>
     </div>
   );

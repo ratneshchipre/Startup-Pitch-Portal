@@ -15,7 +15,7 @@ interface investorPitches {
 export const fetchPitchesForInvestor = createAsyncThunk(
   "fetchPitchesForInvestor",
   async () => {
-    const response = await axios.get("/api/pitch/my-pitches", {
+    const response = await axios.get("/api/pitches/browse-pitches", {
       withCredentials: true,
     });
     console.log(response);
