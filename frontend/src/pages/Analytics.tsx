@@ -49,7 +49,7 @@ const Analytics = () => {
           <div className="flex flex-col w-full pb-[1.5rem]">
             <div className="flex flex-col w-full px-[2rem]">
               <div className="flex flex-col w-full ">
-                <Bar
+                {/* <Bar
                   data={{
                     labels: ["A", "B", "C"],
                     datasets: [
@@ -59,7 +59,7 @@ const Analytics = () => {
                       },
                     ],
                   }}
-                />
+                /> */}
               </div>
               <div className="flex flex-col w-full"></div>
             </div>

@@ -16,7 +16,7 @@ import {
   faHeart as faHeartRegular,
 } from "@fortawesome/free-regular-svg-icons";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { fetchPitchesForFounder } from "../redux/slices/founderPitchSlice";
+import { fetchPitchDetails } from "../redux/slices/pitchDetailsSlice";
 
 type PitchRatingTypes = {
   rating: number;
@@ -37,7 +37,7 @@ interface PitchTypes {
 }
 
 const PitchDetails = () => {
-  const founderPitchesState = useAppSelector((state) => state.founderPitches);
+  const pitchDetailsState = useAppSelector((state) => state.pitchDetails);
   const dispatch = useAppDispatch();
   const [pitch, setPitch] = useState<PitchTypes | null>(null);
   const navigate = useNavigate();
@@ -51,50 +51,42 @@ const PitchDetails = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchPitchesForFounder());
+    dispatch(fetchPitchDetails({ pitchId }));
+    console.log(pitchDetailsState.data);
   }, [dispatch]);
 
   useEffect(() => {
-    if (founderPitchesState.isLoading) {
+    if (pitchDetailsState.isLoading) {
       setLoading(true);
       setError(null);
       return;
     }
 
-    if (founderPitchesState.isError) {
+    if (pitchDetailsState.isError) {
       setLoading(false);
       setError("Failed to load pitches.");
       setPitch(null);
       return;
     }
 
-    if (Array.isArray(founderPitchesState.data) && pitchId) {
-      const found = founderPitchesState.data.find(
-        (p: any) => p && typeof p._id === "string" && p._id === pitchId
-      );
-
-      if (found) {
-        setPitch({
-          _id: found._id || "",
-          title: found.title || "",
-          details: found.details || "",
-          file: {
-            url:
-              found.file &&
-              typeof found.file === "object" &&
-              "url" in found.file
-                ? (found.file.url as string)
-                : "",
-          },
-          category: found.category || "",
-          goal: found.goal || 0,
-          tags: found.tags || "",
-        });
-        setError(null);
-      } else {
-        setPitch(null);
-        setError("Pitch details could not be found for this ID.");
-      }
+    if (pitchDetailsState.data && pitchDetailsState.data._id) {
+      setPitch({
+        _id: pitchDetailsState.data._id || "",
+        title: pitchDetailsState.data.title || "",
+        details: pitchDetailsState.data.details || "",
+        file: {
+          url:
+            pitchDetailsState.data.file &&
+            typeof pitchDetailsState.data.file === "object" &&
+            "url" in pitchDetailsState.data.file
+              ? (pitchDetailsState.data.file.url as string)
+              : "",
+        },
+        category: pitchDetailsState.data.category || "",
+        goal: pitchDetailsState.data.goal || 0,
+        tags: pitchDetailsState.data.tags || "",
+      });
+      setError(null);
     } else if (!pitchId) {
       setPitch(null);
       setError("No Pitch ID provided in the URL.");
@@ -104,9 +96,9 @@ const PitchDetails = () => {
     }
     setLoading(false);
   }, [
-    founderPitchesState.isLoading,
-    founderPitchesState.isError,
-    founderPitchesState.data,
+    pitchDetailsState.isLoading,
+    pitchDetailsState.isError,
+    pitchDetailsState.data,
     pitchId,
   ]);
 

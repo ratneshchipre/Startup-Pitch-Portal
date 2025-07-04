@@ -12,6 +12,7 @@ import userAuthRouter from "./routes/userAuthRoute.js";
 import userAccountRouter from "./routes/userAccountRoute.js";
 import founderPitchRouter from "./routes/founderRoutes/founderPitchRoute.js";
 import investorPitchRouter from "./routes/investorRoutes/investorPitchRoute.js";
+import pitchDetailsRouter from "./routes/pitchDetailsRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 4001;
@@ -36,6 +37,7 @@ app.use(
 // Common Routes
 app.use("/api/user", userAuthRouter);
 app.use("/api/account", userAccountRouter);
+app.use("/api/pitch/details", pitchDetailsRouter);
 // Founder routes
 app.use("/api/pitch", founderPitchRouter);
 // Investor routes
