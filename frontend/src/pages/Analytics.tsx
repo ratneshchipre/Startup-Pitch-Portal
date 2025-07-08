@@ -1,8 +1,35 @@
 import { Chart as ChartJS } from "chart.js/auto";
 // import { Bar } from "react-chartjs-2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { fetchPitchesForFounder } from "../redux/slices/founderPitchSlice";
+import { useEffect, useState } from "react";
+
+interface founderPitches {
+  _id: string;
+  userId: string;
+  title: string;
+  file: object;
+  category: string;
+  goal: number;
+  tags: string;
+}
 
 const Analytics = () => {
+  const founderPitchesState = useAppSelector((state) => state.founderPitches);
+  const dispatch = useAppDispatch();
+  const [pitches, setPitches] = useState<founderPitches[] | null>(null);
+
+  useEffect(() => {
+    dispatch(fetchPitchesForFounder());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (founderPitchesState.data) {
+      setPitches(founderPitchesState.data);
+    }
+  }, [founderPitchesState.data]);
+
   return (
     <div className="flex flex-col w-full">
       <div className="pb-[2rem] mt-[4.6rem] mini-desktop:ml-[20rem]">
@@ -18,7 +45,7 @@ const Analytics = () => {
                 Total Pitches
               </h2>
               <span className="font-Regular text-[2.6rem] text-txt-black px-[1rem] py-[0.8rem]">
-                25
+                {pitches?.length}
               </span>
             </div>
             <div className="flex flex-col w-full bg-nav-white h-auto rounded-lg border-dash-border border-[2px]">

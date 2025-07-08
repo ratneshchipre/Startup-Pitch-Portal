@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { countries } from "../countryList";
+import { countries } from ".././utils/countryList";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { fetchUserData } from "../redux/slices/userDataSlice";
 import axios from "axios";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { categories } from "../categoryList";
+import { categories } from ".././utils/categoryList";
 import axios from "axios";
 
 type UploadPitchFormData = {
