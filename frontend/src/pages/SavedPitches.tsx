@@ -1,4 +1,4 @@
-import PitchCard from "../components/PitchCard";
+// import PitchCard from "../components/PitchCard";
 
 const SavedPitches = () => {
   return (

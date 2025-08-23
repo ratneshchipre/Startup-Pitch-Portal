@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+// import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { Link, useParams } from "react-router-dom";
 
 type PitchRatingTypes = {
@@ -20,6 +20,7 @@ interface PitchProps {
   category: string;
   goal: number;
   tags: string;
+  link: string;
 }
 
 const PitchCard = (props: PitchProps) => {

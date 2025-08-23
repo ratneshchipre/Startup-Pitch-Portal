@@ -39,8 +39,9 @@ const MyPitches = () => {
         {pitches && pitches.length > 0 ? (
           pitches.map((pitch) => (
             <PitchCard
+              details={""}
               key={pitch._id}
-              id={pitch._id}
+              // id={pitch._id}
               link={`/account/${role}/${userId}/pitches/${pitch._id}`}
               {...pitch}
             />

@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import { fadeInUp } from "../utils/motion";
+// import { fadeInUp } from "../utils/motion";
 import HeroSec from "../components/HeroSec";
-import tempImg from "../assets/tempImg.jpg";
+// import tempImg from "../assets/tempImg.jpg";
 import getmatch from "../assets/getmatch.png";
 import analytics from "../assets/analytics.png";
 import uploadPitchImg from "../assets/uploadPitchImg.png";
@@ -12,13 +12,13 @@ import connectionImg from "../assets/connectionImg.png";
 import secureImg from "../assets/secureImg.png";
 import founderImg from "../assets/founderImg.png";
 import investorImg from "../assets/investorImg.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartColumn } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faChartColumn } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   const sectionRef = useRef(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div className="flex flex-col items-center justify-center">

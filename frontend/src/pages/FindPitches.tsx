@@ -53,7 +53,8 @@ const FindPitches = () => {
       <div className="flex flex-col w-full pb-[1.5rem]">
         {pitches?.map((pitch) => (
           <PitchCard
-            id={pitch._id}
+            details={""}
+            // id={pitch._id}
             key={pitch._id}
             link={`/account/${role}/${userId}/find-pitches/${pitch._id}`}
             {...pitch}

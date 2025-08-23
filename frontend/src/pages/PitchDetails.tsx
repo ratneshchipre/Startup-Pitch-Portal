@@ -42,8 +42,8 @@ const PitchDetails = () => {
   const [pitch, setPitch] = useState<PitchTypes | null>(null);
   const navigate = useNavigate();
   const { role, pitchId } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
   const [pitchRating, setPitchRating] = useState<PitchRatingTypes>({
     rating: 0,
     hover: null,
@@ -57,14 +57,14 @@ const PitchDetails = () => {
 
   useEffect(() => {
     if (pitchDetailsState.isLoading) {
-      setLoading(true);
-      setError(null);
+      // setLoading(true);
+      // setError(null);
       return;
     }
 
     if (pitchDetailsState.isError) {
-      setLoading(false);
-      setError("Failed to load pitches.");
+      // setLoading(false);
+      // setError("Failed to load pitches.");
       setPitch(null);
       return;
     }
@@ -86,15 +86,15 @@ const PitchDetails = () => {
         goal: pitchDetailsState.data.goal || 0,
         tags: pitchDetailsState.data.tags || "",
       });
-      setError(null);
+      // setError(null);
     } else if (!pitchId) {
       setPitch(null);
-      setError("No Pitch ID provided in the URL.");
+      // setError("No Pitch ID provided in the URL.");
     } else {
       setPitch(null);
-      setError("No pitches loaded or matching ID found.");
+      // setError("No pitches loaded or matching ID found.");
     }
-    setLoading(false);
+    // setLoading(false);
   }, [
     pitchDetailsState.isLoading,
     pitchDetailsState.isError,

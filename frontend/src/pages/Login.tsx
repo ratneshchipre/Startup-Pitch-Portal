@@ -13,7 +13,7 @@ type LoginFormData = {
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -110,7 +110,7 @@ const Login = () => {
             <button
               type="submit"
               className={`font-Regular mt-[1rem] bg-btn-blue text-nav-white w-full py-[0.5rem] text-center rounded-lg cursor-pointer transition`}
-              disabled={loading}
+              // disabled={loading}
             >
               Continue
               <FontAwesomeIcon icon={faCaretRight} className="ml-[0.5rem]" />

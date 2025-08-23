@@ -1,6 +1,6 @@
-import { Chart as ChartJS } from "chart.js/auto";
+// import { Chart as ChartJS } from "chart.js/auto";
 // import { Bar } from "react-chartjs-2";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { fetchPitchesForFounder } from "../redux/slices/founderPitchSlice";
 import { useEffect, useState } from "react";
